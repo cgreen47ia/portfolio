@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bold Canvas — Design System Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Color */
+      --color-accent: #FFC940;
+      --color-accent-deep: #E8A800;
+      --color-blue: #2A5F9E;
+      --color-blue-deep: #1E4578;
+      --color-blue-bg: #E6EEF6;
+      --color-cta: #C4451E;
+      --color-cta-hover: #A83818;
+      --color-ink: #0A0A0A;
+      --color-ink-inverse: #FAFAFA;
+      --color-canvas: #FAFAFA;
+      --color-surface: #FFFFFF;
+      --color-surface-muted: #EBEBEB;
+      --color-surface-dark: #141414;
+      --color-surface-raised: #1F1F1F;
+      --color-border: #D4D4D4;
+      --color-border-strong: #0A0A0A;
+      --color-border-inverse: #FAFAFA;
+      --color-text-secondary: #525252;
+      --color-text-muted: #737373;
+      --color-text-secondary-inverse: #A3A3A3;
+      --color-success: #15803D;
+      --color-success-bg: #DCFCE7;
+      --color-warning: #B45309;
+      --color-warning-bg: #FEF3C7;
+      --color-error: #B91C1C;
+      --color-error-bg: #FEE2E2;
+      --color-info: #1D4ED8;
+      --color-info-bg: #DBEAFE;
+      --color-overlay: rgba(10, 10, 10, 0.6);
+      --color-focus-ring: #C4451E;
+
+      /* Typography */
+      --font-sans: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+      --font-serif: "Libre Baskerville", Georgia, serif;
+      --font-mono: "JetBrains Mono", Consolas, monospace;
+      --text-display-xl: clamp(2.75rem, 6vw, 5.5rem);
+      --text-display-lg: clamp(2.25rem, 4.5vw, 4rem);
+      --text-display-md: clamp(1.75rem, 3vw, 2.75rem);
+      --text-heading-lg: 2rem;
+      --text-heading-md: 1.5rem;
+      --text-heading-sm: 1.125rem;
+      --text-body-lg: 1.125rem;
+      --text-body-md: 1rem;
+      --text-body-sm: 0.875rem;
+      --text-label: 0.75rem;
+      --text-caption: 0.6875rem;
+
+      /* Space */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 24px;
+      --space-6: 32px;
+      --space-7: 48px;
+      --space-8: 64px;
+      --space-9: 96px;
+      --space-10: 128px;
+
+      /* Layout */
+      --container-max: 1440px;
+      --container-narrow: 960px;
+      --section-padding-x: clamp(20px, 5vw, 80px);
+      --section-padding-y: clamp(64px, 10vw, 120px);
+
+      /* Radius & shadow */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-full: 999px;
+      --shadow-sm: 0 1px 3px rgba(10, 10, 10, 0.08);
+      --shadow-md: 0 4px 12px rgba(10, 10, 10, 0.1);
+      --shadow-lg: 0 12px 32px rgba(10, 10, 10, 0.12);
+      --shadow-xl: 0 24px 48px rgba(10, 10, 10, 0.16);
+
+      /* Motion */
+      --duration-fast: 120ms;
+      --duration-normal: 200ms;
+      --duration-slow: 320ms;
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      font-size: var(--text-body-md);
+      line-height: 1.6;
+      color: var(--color-ink);
+      background: var(--color-canvas);
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--color-focus-ring);
+      outline-offset: 2px;
+    }
+
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--section-padding-x);
+    }
+
+    .section {
+      padding: var(--section-padding-y) 0;
+    }
+
+    .section-title {
+      font-size: var(--text-heading-lg);
+      font-weight: 700;
+      margin: 0 0 var(--space-6);
+      letter-spacing: -0.02em;
+    }
+
+    .section-desc {
+      color: var(--color-text-secondary);
+      margin: 0 0 var(--space-7);
+      max-width: 65ch;
+    }
+
+    .preview-tag {
+      display: inline-block;
+      font-size: var(--text-caption);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-3);
+    }
+
+    /* TOC */
+    .toc {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding: var(--space-4) 0;
+      position: sticky;
+      top: 64px;
+      z-index: 50;
+      overflow-x: auto;
+    }
+
+    .toc-inner {
+      display: flex;
+      gap: var(--space-4);
+      flex-wrap: nowrap;
+      min-width: min-content;
+    }
+
+    .toc a {
+      font-size: var(--text-label);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      white-space: nowrap;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-sm);
+      transition: color var(--duration-normal) var(--ease-out);
+    }
+
+    .toc a:hover { color: var(--color-ink); }
+
+    /* Hero header */
+    .ds-hero {
+      background: var(--color-accent);
+      padding: var(--section-padding-y) 0;
+    }
+
+    .ds-hero__grid {
+      display: grid;
+      gap: var(--space-7);
+      align-items: center;
+    }
+
+    @media (min-width: 768px) {
+      .ds-hero__grid {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-8);
+      }
+    }
+
+    .ds-hero__media {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ds-hero__video,
+    .ds-hero__freeze-canvas {
+      width: 100%;
+      max-width: 780px;
+      display: block;
+      background: transparent;
+      border-radius: var(--radius-lg);
+      filter: drop-shadow(0 12px 32px rgba(10, 10, 10, 0.12));
+    }
+
+    .ds-hero__freeze-canvas {
+      display: none;
+    }
+
+    .ds-hero__freeze-canvas.is-visible {
+      display: block;
+    }
+
+    .ds-hero__video.is-hidden {
+      display: none;
+    }
+
+    .ds-hero h1 {
+      font-size: var(--text-display-xl);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin: 0 0 var(--space-5);
+      max-width: 14ch;
+    }
+
+    .ds-hero .intent {
+      font-size: var(--text-body-lg);
+      max-width: 50ch;
+      margin: 0;
+    }
+
+    /* Nav demo */
+    .nav-demo {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--color-surface);
+      box-shadow: var(--shadow-sm);
+      height: 64px;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-demo .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: var(--space-5);
+    }
+
+    .nav-logo {
+      font-weight: 700;
+      font-size: var(--text-heading-sm);
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .nav-logo-mark {
+      width: 28px;
+      height: 28px;
+      background: var(--color-ink);
+      border-radius: var(--radius-sm);
+    }
+
+    .nav-links {
+      display: none;
+      gap: var(--space-5);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    @media (min-width: 768px) {
+      .nav-links { display: flex; }
+      .nav-menu-btn { display: none; }
+    }
+
+    .nav-links a {
+      font-size: var(--text-label);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-ink);
+      text-decoration: none;
+    }
+
+    .nav-links a:hover { text-decoration: underline; }
+
+    .nav-link-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .badge-new {
+      background: var(--color-cta);
+      color: white;
+      font-size: var(--text-caption);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+    }
+
+    .nav-menu-btn {
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--color-border);
+      background: transparent;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      font-family: var(--font-sans);
+      font-weight: 500;
+      font-size: var(--text-body-sm);
+      border: none;
+      cursor: pointer;
+      border-radius: var(--radius-md);
+      transition: background var(--duration-normal) var(--ease-out),
+                  transform var(--duration-fast) var(--ease-out),
+                  box-shadow var(--duration-normal) var(--ease-out);
+      text-decoration: none;
+      min-height: 44px;
+      padding: 14px 28px;
+    }
+
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+    .btn--primary { background: var(--color-cta); color: white; }
+    .btn--primary:hover { background: var(--color-cta-hover); }
+
+    .btn--secondary { background: var(--color-accent); color: var(--color-ink); }
+    .btn--secondary:hover { background: var(--color-accent-deep); }
+
+    .btn--ghost {
+      background: transparent;
+      color: var(--color-ink);
+      border: 1px solid var(--color-border-strong);
+    }
+    .btn--ghost:hover { background: rgba(10, 10, 10, 0.04); }
+
+    .btn--ghost-inverse {
+      background: transparent;
+      color: var(--color-ink-inverse);
+      border: 1px solid var(--color-border-inverse);
+    }
+
+    .btn--pill { border-radius: var(--radius-full); }
+
+    .btn--sm { min-height: 36px; padding: 12px 20px; font-size: var(--text-caption); }
+    .btn--lg { min-height: 52px; padding: 18px 36px; font-size: var(--text-body-md); }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      align-items: center;
+    }
+
+    /* Color swatches */
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: var(--space-4);
+    }
+
+    .swatch {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+    }
+
+    .swatch-color { height: 72px; }
+    .swatch-info {
+      padding: var(--space-3);
+      background: var(--color-surface);
+      font-size: var(--text-body-sm);
+    }
+
+    .swatch-info code {
+      font-family: var(--font-mono);
+      font-size: var(--text-caption);
+      color: var(--color-text-muted);
+      display: block;
+      margin-top: var(--space-1);
+    }
+
+    /* Typography samples */
+    .type-sample { margin-bottom: var(--space-6); }
+    .type-sample .label {
+      font-size: var(--text-caption);
+      font-family: var(--font-mono);
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-2);
+    }
+
+    .type-display-xl { font-size: var(--text-display-xl); font-weight: 700; line-height: 1.05; letter-spacing: -0.02em; }
+    .type-display-lg { font-size: var(--text-display-lg); font-weight: 700; line-height: 1.08; letter-spacing: -0.02em; }
+    .type-display-md { font-size: var(--text-display-md); font-weight: 700; line-height: 1.12; }
+    .type-serif { font-family: var(--font-serif); font-weight: 400; font-size: var(--text-display-md); }
+    .type-eyebrow {
+      font-size: var(--text-label);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+    .type-eyebrow::after {
+      content: "";
+      width: 48px;
+      height: 1px;
+      background: var(--color-border);
+    }
+
+    /* Grid demo */
+    .grid-demo {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 24px;
+    }
+
+    .grid-col {
+      background: var(--color-accent);
+      height: 48px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-caption);
+      font-family: var(--font-mono);
+    }
+
+    .grid-col.span-4 { grid-column: span 4; }
+    .grid-col.span-6 { grid-column: span 6; }
+    .grid-col.span-12 { grid-column: span 12; }
+
+    @media (max-width: 767px) {
+      .grid-demo { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+      .grid-col.span-4, .grid-col.span-6 { grid-column: span 2; }
+    }
+
+    /* Spacing demo */
+    .spacing-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: var(--space-4);
+    }
+
+    .spacing-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .spacing-bar {
+      background: var(--color-cta);
+      width: 24px;
+      border-radius: var(--radius-sm);
+    }
+
+    .spacing-label {
+      font-size: var(--text-caption);
+      font-family: var(--font-mono);
+      color: var(--color-text-muted);
+    }
+
+    /* Cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--space-5);
+    }
+
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      color: var(--color-ink);
+      transition: box-shadow var(--duration-normal) var(--ease-out),
+                  transform var(--duration-normal) var(--ease-out);
+    }
+
+    .card--elevated { box-shadow: var(--shadow-md); border: none; }
+
+    .card--interactive:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+      cursor: pointer;
+    }
+
+    .card h3 {
+      font-size: var(--text-heading-sm);
+      margin: var(--space-3) 0 var(--space-2);
+    }
+
+    .card p {
+      color: var(--color-text-secondary);
+      font-size: var(--text-body-sm);
+      margin: 0;
+    }
+
+    .card-dark {
+      background: var(--color-surface-dark);
+      color: var(--color-ink-inverse);
+      border: none;
+      border-radius: var(--radius-xl);
+    }
+
+    .card-dark p { color: var(--color-text-secondary-inverse); }
+
+    /* Forms */
+    .form-grid {
+      display: grid;
+      gap: var(--space-5);
+      max-width: 480px;
+    }
+
+    .field label {
+      display: block;
+      font-size: var(--text-body-sm);
+      font-weight: 500;
+      letter-spacing: 0;
+      text-transform: capitalize;
+      margin-bottom: 5px;
+    }
+
+    .field input {
+      width: 100%;
+      height: 44px;
+      padding: 0 var(--space-4);
+      font-family: var(--font-sans);
+      font-size: var(--text-body-md);
+      text-transform: capitalize;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+      transition: border-color var(--duration-normal);
+    }
+
+    .field input:focus {
+      border-color: var(--color-blue);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(42, 95, 158, 0.2);
+    }
+
+    .field--error input:focus,
+    .field--error .select-trigger:focus {
+      border-color: var(--color-error);
+      box-shadow: 0 0 0 2px rgba(185, 28, 28, 0.15);
+    }
+
+    .field--error input,
+    .field--error .select-trigger {
+      border-color: var(--color-error);
+    }
+
+    .field--error .select.is-open .select-trigger {
+      border-color: var(--color-error);
+      box-shadow: 0 0 0 2px rgba(185, 28, 28, 0.15);
+    }
+
+    /* Custom select */
+    .select {
+      position: relative;
+      width: 100%;
+    }
+
+    .select-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      height: 44px;
+      padding: 0 var(--space-4);
+      padding-right: var(--space-3);
+      font-family: var(--font-sans);
+      font-size: var(--text-body-md);
+      font-weight: 400;
+      text-align: left;
+      text-transform: capitalize;
+      color: var(--color-ink);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+      cursor: pointer;
+      transition: border-color var(--duration-normal) var(--ease-out),
+                  box-shadow var(--duration-normal) var(--ease-out),
+                  border-radius var(--duration-fast) var(--ease-out);
+    }
+
+    .select-trigger:hover {
+      border-color: var(--color-text-muted);
+    }
+
+    .select-trigger:focus {
+      border-color: var(--color-blue);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(42, 95, 158, 0.2);
+    }
+
+    .select.is-open .select-trigger {
+      border-color: var(--color-blue);
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      box-shadow: none;
+    }
+
+    .select-chevron {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      color: var(--color-ink);
+      stroke-width: 1.75;
+      transition: transform var(--duration-normal) var(--ease-out);
+    }
+
+    .select.is-open .select-chevron {
+      transform: rotate(180deg);
+    }
+
+    .select-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      margin: 0;
+      padding: var(--space-1) 0;
+      list-style: none;
+      background: var(--color-surface);
+      border: 1px solid var(--color-blue);
+      border-top: none;
+      border-radius: 0 0 var(--radius-md) var(--radius-md);
+      box-shadow: var(--shadow-md);
+      max-height: 220px;
+      overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-4px);
+      transition: opacity var(--duration-normal) var(--ease-out),
+                  transform var(--duration-normal) var(--ease-out),
+                  visibility var(--duration-normal);
+    }
+
+    .select.is-open .select-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .select-option {
+      padding: var(--space-3) var(--space-4);
+      font-size: var(--text-body-md);
+      color: var(--color-ink);
+      cursor: pointer;
+      transition: background var(--duration-fast) var(--ease-out),
+                  color var(--duration-fast) var(--ease-out);
+    }
+
+    .select-option:hover,
+    .select-option:focus {
+      background: var(--color-surface-muted);
+      outline: none;
+    }
+
+    .select-option.is-selected {
+      background: var(--color-cta);
+      color: white;
+    }
+
+    .select-option.is-selected:hover,
+    .select-option.is-selected:focus {
+      background: var(--color-cta-hover);
+      color: white;
+    }
+
+    .field-hint,
+    .field-error {
+      font-size: var(--text-body-sm);
+      margin-top: 5px;
+      margin-bottom: 0;
+    }
+
+    .field-hint {
+      color: var(--color-text-muted);
+    }
+
+    .field-error {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-2);
+      color: var(--color-error);
+    }
+
+    .field-error__icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      stroke-width: 2;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      min-height: 44px;
+    }
+
+    .checkbox-row input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--color-cta);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: var(--space-5);
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: var(--space-5);
+    }
+
+    .tab {
+      background: none;
+      border: none;
+      padding: var(--space-4) 0;
+      font-family: var(--font-sans);
+      font-size: var(--text-body-sm);
+      font-weight: 500;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color var(--duration-normal);
+    }
+
+    .tab:hover { color: var(--color-ink); }
+    .tab.is-active {
+      color: var(--color-ink);
+      border-bottom-color: var(--color-cta);
+    }
+
+    /* Table */
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--text-body-sm);
+    }
+
+    th {
+      text-align: left;
+      font-size: var(--text-label);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: var(--space-4);
+      border-bottom: 2px solid var(--color-border-strong);
+      background: var(--color-surface);
+    }
+
+    td {
+      padding: var(--space-4);
+      border-bottom: 1px solid var(--color-border);
+      height: 52px;
+    }
+
+    tr:nth-child(even) td { background: rgba(235, 235, 235, 0.5); }
+
+    td.mono { font-family: var(--font-mono); font-size: var(--text-caption); }
+
+    /* Badges & alerts */
+    .badge-row { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: var(--text-caption);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .badge--neutral { background: var(--color-surface-muted); color: var(--color-ink); }
+    .badge--cta { background: var(--color-cta); color: white; }
+    .badge--success { background: var(--color-success-bg); color: var(--color-success); }
+    .badge--warning { background: var(--color-warning-bg); color: var(--color-warning); }
+    .badge--error { background: var(--color-error-bg); color: var(--color-error); }
+
+    .alert {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      padding: var(--space-4) var(--space-5);
+      border-radius: var(--radius-md);
+      border-left: 4px solid;
+      margin-bottom: var(--space-4);
+    }
+
+    .alert__title-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .alert__icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      stroke: currentColor;
+    }
+
+    .alert__message {
+      margin: 0;
+      padding-left: calc(20px + var(--space-4));
+      font-size: var(--text-body-sm);
+      line-height: 1.5;
+    }
+
+    .alert--success { background: var(--color-success-bg); border-color: var(--color-success); color: var(--color-success); }
+    .alert--warning { background: var(--color-warning-bg); border-color: var(--color-warning); color: var(--color-warning); }
+    .alert--error { background: var(--color-error-bg); border-color: var(--color-error); color: var(--color-error); }
+    .alert--info { background: var(--color-blue-bg); border-color: var(--color-blue); color: var(--color-blue-deep); }
+
+    .alert strong { display: block; margin: 0; color: inherit; font-size: var(--text-body-sm); line-height: 1.5; }
+
+    /* Empty, loading, error */
+    .empty-state {
+      text-align: center;
+      padding: var(--space-8);
+      border: 2px dashed var(--color-border);
+      border-radius: var(--radius-lg);
+      max-width: 400px;
+    }
+
+    .empty-state i { color: var(--color-text-muted); margin-bottom: var(--space-4); }
+
+    .skeleton-group { max-width: 360px; }
+    .skeleton {
+      background: var(--color-surface-muted);
+      border-radius: var(--radius-md);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .skeleton-title { height: 24px; width: 70%; margin-bottom: var(--space-3); }
+    .skeleton-line { height: 14px; margin-bottom: var(--space-2); }
+    .skeleton-line:last-child { width: 60%; }
+
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--color-border);
+      border-top-color: var(--color-cta);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Surfaces & shadows */
+    .surface-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-5);
+    }
+
+    .surface-box {
+      width: 160px;
+      height: 100px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-caption);
+      font-family: var(--font-mono);
+      color: var(--color-ink);
+    }
+
+    .radius-row {
+      display: flex;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+      margin-top: var(--space-6);
+    }
+
+    .radius-demo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      min-width: 80px;
+      padding: 0 var(--space-3);
+      background: var(--color-accent);
+      color: var(--color-ink);
+      font-size: var(--text-caption);
+      font-family: var(--font-mono);
+    }
+
+    .radius-demo--full { min-width: 120px; }
+
+    /* Images */
+    .image-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-4);
+    }
+
+    .img-card {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      background: var(--color-surface-muted);
+    }
+
+    .img-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%);
+    }
+
+    .img-placeholder {
+      aspect-ratio: 3/4;
+      background: var(--color-surface-muted);
+      border: 2px dashed var(--color-border);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-body-sm);
+      color: var(--color-text-muted);
+      padding: var(--space-4);
+      text-align: center;
+    }
+
+    /* Icons */
+    .icon-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-6);
+      align-items: center;
+    }
+
+    .icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-caption);
+      color: var(--color-text-muted);
+    }
+
+    /* Motion demo */
+    .motion-card {
+      padding: var(--space-6);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      color: var(--color-ink);
+      transition: box-shadow var(--duration-normal) var(--ease-out),
+                  transform var(--duration-normal) var(--ease-out),
+                  border-color var(--duration-normal);
+      cursor: default;
+      max-width: 280px;
+    }
+
+    .motion-card h3 {
+      margin: 0 0 var(--space-2);
+      font-size: var(--text-heading-sm);
+      color: var(--color-ink);
+    }
+
+    .motion-card p {
+      margin: 0;
+      font-size: var(--text-body-sm);
+      color: var(--color-text-secondary);
+    }
+
+    .motion-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+      border-color: var(--color-accent-deep);
+    }
+
+    /* Illustration placeholder */
+    .illustration-placeholder {
+      background: var(--color-surface-muted);
+      border: 2px dashed var(--color-border);
+      border-radius: var(--radius-lg);
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-muted);
+      font-size: var(--text-body-sm);
+      text-align: center;
+      padding: var(--space-6);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--color-overlay);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-4);
+    }
+
+    .modal-backdrop.is-open { display: flex; }
+
+    .modal {
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      padding: var(--space-6);
+      max-width: var(--container-narrow);
+      width: 100%;
+      position: relative;
+      animation: modalIn var(--duration-slow) var(--ease-out);
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: var(--space-4);
+      right: var(--space-4);
+      width: 44px;
+      height: 44px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-close:hover { background: var(--color-surface-muted); }
+
+    /* Tooltip */
+    .tooltip-demo {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-surface-dark);
+      color: var(--color-ink-inverse);
+      font-size: var(--text-body-sm);
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--duration-normal);
+    }
+
+    .tooltip-demo:hover .tooltip,
+    .tooltip-demo:focus-within .tooltip { opacity: 1; }
+
+    /* Dark section */
+    .theme-dark {
+      background: var(--color-surface-dark);
+      color: var(--color-ink-inverse);
+    }
+
+    .theme-dark .section-desc { color: var(--color-text-secondary-inverse); }
+    .theme-dark .preview-tag { color: var(--color-text-secondary-inverse); }
+
+    /* Semantic badges & alerts stay readable inside dark sections */
+    .theme-dark .badge--neutral { background: var(--color-surface-muted); color: var(--color-ink); }
+    .theme-dark .badge--cta { background: var(--color-cta); color: #FFFFFF; }
+    .theme-dark .badge--success { background: var(--color-success-bg); color: var(--color-success); }
+    .theme-dark .badge--warning { background: var(--color-warning-bg); color: var(--color-warning); }
+    .theme-dark .badge--error { background: var(--color-error-bg); color: var(--color-error); }
+
+    .theme-dark .alert--success { color: var(--color-success); }
+    .theme-dark .alert--warning { color: var(--color-warning); }
+    .theme-dark .alert--error { color: var(--color-error); }
+    .theme-dark .alert--info { color: var(--color-blue-deep); }
+
+    .theme-dark .card:not(.card-dark),
+    .theme-dark .motion-card {
+      color: var(--color-ink);
+    }
+
+    .theme-dark .card:not(.card-dark) h3,
+    .theme-dark .motion-card h3 {
+      color: var(--color-ink);
+    }
+
+    .theme-dark .card:not(.card-dark) p,
+    .theme-dark .motion-card p {
+      color: var(--color-text-secondary);
+    }
+
+    /* Accent section */
+    .theme-accent {
+      background: var(--color-accent);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--color-ink);
+      color: var(--color-text-secondary-inverse);
+      padding: var(--space-8) 0;
+      font-size: var(--text-body-sm);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="nav-demo" id="navigation">
+    <div class="container">
+      <div class="nav-logo">
+        <span class="nav-logo-mark" aria-hidden="true"></span>
+        Bold Canvas
+      </div>
+      <ul class="nav-links">
+        <li><a href="#colors" class="nav-link-badge">Components <span class="badge-new">New</span></a></li>
+        <li><a href="#typography">Typography</a></li>
+        <li><a href="#layout">Layout</a></li>
+        <li><a href="#forms">Resources</a></li>
+      </ul>
+      <button class="nav-menu-btn" aria-label="Open menu">
+        <i data-lucide="menu" aria-hidden="true"></i>
+      </button>
+      <a href="#buttons" class="btn btn--primary btn--pill">Get Started <i data-lucide="arrow-right" style="width:16px;height:16px"></i></a>
+    </div>
+  </header>
+
+  <!-- Design system header -->
+  <section class="ds-hero" id="header">
+    <div class="container ds-hero__grid">
+      <div class="ds-hero__content">
+        <p class="type-eyebrow">Design System Preview</p>
+        <h1>Bold Canvas</h1>
+        <p class="intent">Confident, editorial design language for premium creative portfolio and studio marketing surfaces.</p>
+      </div>
+      <div class="ds-hero__media">
+        <video
+          class="ds-hero__video"
+          id="ds-hero-video"
+          src="assets/hero-demo.webm"
+          autoplay
+          muted
+          preload="auto"
+          playsinline
+          aria-label="Design system preview animation"
+        ></video>
+        <canvas class="ds-hero__freeze-canvas" id="ds-hero-freeze-canvas" aria-hidden="true"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOC -->
+  <nav class="toc" aria-label="Preview sections">
+    <div class="container toc-inner">
+      <a href="#colors">Colors</a>
+      <a href="#typography">Typography</a>
+      <a href="#layout">Layout</a>
+      <a href="#spacing">Spacing</a>
+      <a href="#buttons">Buttons</a>
+      <a href="#cards">Cards</a>
+      <a href="#forms">Forms</a>
+      <a href="#navigation">Navigation</a>
+      <a href="#tables">Tables</a>
+      <a href="#modals">Modals</a>
+      <a href="#badges">Badges & Alerts</a>
+      <a href="#states">States</a>
+      <a href="#imagery">Imagery</a>
+      <a href="#icons">Icons</a>
+      <a href="#effects">Effects</a>
+      <a href="#motion">Motion</a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Colors -->
+    <section class="section" id="colors">
+      <div class="container">
+        <span class="preview-tag">§7 Color System</span>
+        <h2 class="section-title">Color Tokens</h2>
+        <p class="section-desc">High-contrast palette with accent fields, warm CTA, and semantic status colors.</p>
+        <div class="swatch-grid">
+          <div class="swatch"><div class="swatch-color" style="background:#FFC940"></div><div class="swatch-info">Accent<code>--color-accent #FFC940</code></div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#2A5F9E"></div><div class="swatch-info">Blue<code>--color-blue #2A5F9E</code></div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#1E4578"></div><div class="swatch-info">Blue Deep<code>--color-blue-deep #1E4578</code></div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#E6EEF6;border-bottom:1px solid #D4D4D4"></div><div class="swatch-info">Blue BG<code>--color-blue-bg #E6EEF6</code></div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#C4451E"></div><div class="swatch-info">CTA<code>--color-cta #C4451E</code></div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#0A0A0A"></div><div class="swatch-info">Ink<code>--color-ink #0A0A0A</code></div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#141414"></div><div class="swatch-info">Dark Surface<code>--color-surface-dark #141414</code></div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#FAFAFA;border-bottom:1px solid #D4D4D4"></div><div class="swatch-info">Canvas<code>--color-canvas #FAFAFA</code></div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#EBEBEB"></div><div class="swatch-info">Muted<code>--color-surface-muted #EBEBEB</code></div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#15803D"></div><div class="swatch-info">Success<code>--color-success #15803D</code></div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#B91C1C"></div><div class="swatch-info">Error<code>--color-error #B91C1C</code></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Typography -->
+    <section class="section theme-dark" id="typography">
+      <div class="container">
+        <span class="preview-tag">§8 Typography</span>
+        <h2 class="section-title">Type Scale</h2>
+        <div class="type-sample">
+          <div class="label">--text-display-xl</div>
+          <div class="type-display-xl">Build with confidence.</div>
+        </div>
+        <div class="type-sample">
+          <div class="label">--text-display-lg</div>
+          <div class="type-display-lg">Features that elevate your work.</div>
+        </div>
+        <div class="type-sample">
+          <div class="label">--text-display-md / serif accent</div>
+          <div class="type-serif">Featured Spotlight</div>
+        </div>
+        <div class="type-sample">
+          <div class="label">--text-body-lg</div>
+          <p style="font-size:var(--text-body-lg);max-width:65ch;color:var(--color-text-secondary-inverse)">Lead paragraph for immersive sections. Clean sans-serif with generous line height for comfortable reading on dark backgrounds.</p>
+        </div>
+        <div class="type-sample">
+          <div class="label">--text-label (eyebrow)</div>
+          <p class="type-eyebrow" style="color:var(--color-ink-inverse)">Trusted by studios</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Layout -->
+    <section class="section" id="layout">
+      <div class="container">
+        <span class="preview-tag">§6 Layout</span>
+        <h2 class="section-title">12-Column Grid</h2>
+        <p class="section-desc">Desktop: 12 columns, 24px gutters, max-width 1440px. Collapses to 4 columns on mobile.</p>
+        <div class="grid-demo">
+          <div class="grid-col span-12">span-12</div>
+          <div class="grid-col span-6">span-6</div>
+          <div class="grid-col span-6">span-6</div>
+          <div class="grid-col span-4">span-4</div>
+          <div class="grid-col span-4">span-4</div>
+          <div class="grid-col span-4">span-4</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Spacing -->
+    <section class="section theme-accent" id="spacing">
+      <div class="container">
+        <span class="preview-tag">§6 Spacing</span>
+        <h2 class="section-title">Spacing Scale</h2>
+        <div class="spacing-row">
+          <div class="spacing-block"><div class="spacing-bar" style="height:4px"></div><span class="spacing-label">--space-1 4px</span></div>
+          <div class="spacing-block"><div class="spacing-bar" style="height:8px"></div><span class="spacing-label">--space-2 8px</span></div>
+          <div class="spacing-block"><div class="spacing-bar" style="height:16px"></div><span class="spacing-label">--space-4 16px</span></div>
+          <div class="spacing-block"><div class="spacing-bar" style="height:24px"></div><span class="spacing-label">--space-5 24px</span></div>
+          <div class="spacing-block"><div class="spacing-bar" style="height:32px"></div><span class="spacing-label">--space-6 32px</span></div>
+          <div class="spacing-block"><div class="spacing-bar" style="height:48px"></div><span class="spacing-label">--space-7 48px</span></div>
+          <div class="spacing-block"><div class="spacing-bar" style="height:64px"></div><span class="spacing-label">--space-8 64px</span></div>
+          <div class="spacing-block"><div class="spacing-bar" style="height:96px"></div><span class="spacing-label">--space-9 96px</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Buttons -->
+    <section class="section" id="buttons">
+      <div class="container">
+        <span class="preview-tag">§9 Buttons</span>
+        <h2 class="section-title">Buttons</h2>
+        <div class="btn-row" style="margin-bottom:var(--space-6)">
+          <button class="btn btn--primary">Primary CTA <i data-lucide="arrow-right" style="width:16px;height:16px"></i></button>
+          <button class="btn btn--secondary">Secondary</button>
+          <button class="btn btn--ghost">Ghost</button>
+          <button class="btn btn--primary" disabled>Disabled</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn--primary btn--sm">Small</button>
+          <button class="btn btn--primary">Medium</button>
+          <button class="btn btn--primary btn--lg">Large</button>
+          <button class="btn btn--ghost btn--pill">Pill Ghost</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cards -->
+    <section class="section theme-dark" id="cards">
+      <div class="container">
+        <span class="preview-tag">§9 Cards</span>
+        <h2 class="section-title">Cards</h2>
+        <div class="card-grid">
+          <article class="card">
+            <span class="badge badge--neutral">Default</span>
+            <h3>Portfolio Grid</h3>
+            <p>Standard card with border and generous internal padding.</p>
+          </article>
+          <article class="card card--elevated">
+            <span class="badge badge--cta">Elevated</span>
+            <h3>Custom Type</h3>
+            <p>Raised surface with medium shadow, no border.</p>
+          </article>
+          <article class="card card--interactive">
+            <span class="badge badge--neutral">Interactive</span>
+            <h3>Hover Effects</h3>
+            <p>Lifts on hover with larger shadow. Hover me.</p>
+          </article>
+          <article class="card card-dark">
+            <p class="type-eyebrow" style="color:var(--color-text-secondary-inverse)">Feature</p>
+            <h3 style="font-family:var(--font-serif);font-weight:400;font-size:var(--text-display-md)">Dark Feature</h3>
+            <p>Immersive dark card for spotlight content blocks.</p>
+            <button class="btn btn--secondary btn--pill" style="margin-top:var(--space-5)">Learn More</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Forms -->
+    <section class="section" id="forms">
+      <div class="container">
+        <span class="preview-tag">§9 Forms</span>
+        <h2 class="section-title">Form Controls</h2>
+        <div class="form-grid">
+          <div class="field">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" placeholder="Enter your name" aria-describedby="name-hint">
+            <p class="field-hint" id="name-hint">As it appears on your portfolio.</p>
+          </div>
+          <div class="field field--error">
+            <label id="role-label">Role</label>
+            <div class="select" data-select>
+              <button
+                type="button"
+                class="select-trigger"
+                id="role"
+                aria-labelledby="role-label"
+                aria-haspopup="listbox"
+                aria-expanded="false"
+                aria-controls="role-listbox"
+                aria-describedby="role-error"
+              >
+                <span class="select-value">Designer</span>
+                <i data-lucide="chevron-down" class="select-chevron" aria-hidden="true"></i>
+              </button>
+              <ul class="select-menu" id="role-listbox" role="listbox" aria-labelledby="role-label" hidden>
+                <li class="select-option is-selected" role="option" aria-selected="true" tabindex="-1" data-value="designer">Designer</li>
+                <li class="select-option" role="option" aria-selected="false" tabindex="-1" data-value="developer">Developer</li>
+                <li class="select-option" role="option" aria-selected="false" tabindex="-1" data-value="art-director">Art Director</li>
+              </ul>
+              <input type="hidden" name="role" value="designer">
+            </div>
+            <p class="field-error" id="role-error" role="alert">
+              <i data-lucide="circle-alert" class="field-error__icon" aria-hidden="true"></i>
+              <span>Please select a valid role.</span>
+            </p>
+          </div>
+          <div class="field field--error">
+            <label for="email">Email</label>
+            <input type="email" id="email" value="invalid-email" aria-describedby="email-error">
+            <p class="field-error" id="email-error" role="alert">
+              <i data-lucide="circle-alert" class="field-error__icon" aria-hidden="true"></i>
+              <span>Please enter a valid email address.</span>
+            </p>
+          </div>
+          <div class="checkbox-row">
+            <input type="checkbox" id="terms" checked>
+            <label for="terms" style="text-transform:none;letter-spacing:0;font-size:var(--text-body-sm)">Subscribe to studio updates</label>
+          </div>
+        </div>
+
+        <div style="margin-top:var(--space-7)">
+          <span class="preview-tag">§9 Tabs</span>
+          <div class="tabs" role="tablist">
+            <button class="tab is-active" role="tab" aria-selected="true">Overview</button>
+            <button class="tab" role="tab">Features</button>
+            <button class="tab" role="tab">Pricing</button>
+          </div>
+          <p class="section-desc" style="margin:0">Tab content area with underline active indicator.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation note -->
+    <section class="section theme-accent" id="navigation">
+      <div class="container">
+        <span class="preview-tag">§9 Navigation</span>
+        <h2 class="section-title">Navigation Pattern</h2>
+        <p class="section-desc">Sticky white bar with uppercase tracked links, optional badge, and primary CTA. See the top of this page for the live demo. Mobile uses a 44×44px menu trigger.</p>
+        <div class="btn-row">
+          <a href="#" class="btn btn--ghost btn--pill">Showcase</a>
+          <a href="#" class="btn btn--ghost btn--pill">Features</a>
+          <a href="#" class="btn btn--ghost btn--pill">Resources</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tables -->
+    <section class="section" id="tables">
+      <div class="container">
+        <span class="preview-tag">§9 Tables</span>
+        <h2 class="section-title">Project List</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Client</th>
+                <th>Status</th>
+                <th>Updated</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Brand Identity</td>
+                <td>Northwind Studio</td>
+                <td><span class="badge badge--success">Published</span></td>
+                <td class="mono">2026-06-28</td>
+              </tr>
+              <tr>
+                <td>Motion Reel</td>
+                <td>Atlas Collective</td>
+                <td><span class="badge badge--warning">Draft</span></td>
+                <td class="mono">2026-06-25</td>
+              </tr>
+              <tr>
+                <td>Editorial Site</td>
+                <td>Form &amp; Field</td>
+                <td><span class="badge badge--neutral">Review</span></td>
+                <td class="mono">2026-06-20</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modals -->
+    <section class="section" id="modals">
+      <div class="container">
+        <span class="preview-tag">§9 Modals</span>
+        <h2 class="section-title">Dialog</h2>
+        <p class="section-desc">Centered panel with overlay backdrop. Closes on Escape or close button.</p>
+        <button class="btn btn--primary" id="open-modal">Open Modal</button>
+
+        <div class="tooltip-demo" style="margin-left:var(--space-5)">
+          <button class="btn btn--ghost" aria-describedby="tip1">Tooltip Demo</button>
+          <span class="tooltip" id="tip1" role="tooltip">Save your progress</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Badges & Alerts -->
+    <section class="section theme-dark" id="badges">
+      <div class="container">
+        <span class="preview-tag">§9 Badges & Alerts</span>
+        <h2 class="section-title">Badges & Alerts</h2>
+        <div class="badge-row" style="margin-bottom:var(--space-7)">
+          <span class="badge badge--cta">New</span>
+          <span class="badge badge--neutral">Draft</span>
+          <span class="badge badge--success">Live</span>
+          <span class="badge badge--warning">Pending</span>
+          <span class="badge badge--error">Failed</span>
+        </div>
+        <div class="alert alert--success">
+          <div class="alert__title-row">
+            <i data-lucide="check-circle" class="alert__icon" aria-hidden="true"></i>
+            <strong>Published successfully</strong>
+          </div>
+          <p class="alert__message">Your portfolio is now live.</p>
+        </div>
+        <div class="alert alert--warning">
+          <div class="alert__title-row">
+            <i data-lucide="alert-triangle" class="alert__icon" aria-hidden="true"></i>
+            <strong>Storage almost full</strong>
+          </div>
+          <p class="alert__message">Upgrade to add more projects.</p>
+        </div>
+        <div class="alert alert--error">
+          <div class="alert__title-row">
+            <i data-lucide="x-circle" class="alert__icon" aria-hidden="true"></i>
+            <strong>Upload failed</strong>
+          </div>
+          <p class="alert__message">File exceeds the 10MB limit.</p>
+        </div>
+        <div class="alert alert--info">
+          <div class="alert__title-row">
+            <i data-lucide="info" class="alert__icon" aria-hidden="true"></i>
+            <strong>Tip</strong>
+          </div>
+          <p class="alert__message">Use custom fonts for a unique type system.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Empty, Loading, Error -->
+    <section class="section" id="states">
+      <div class="container">
+        <span class="preview-tag">§9 Empty, Loading & Error States</span>
+        <h2 class="section-title">States</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--space-6)">
+          <div class="empty-state">
+            <i data-lucide="folder-open" style="width:48px;height:48px"></i>
+            <h3 style="font-size:var(--text-heading-sm);margin:0 0 var(--space-2)">No projects yet</h3>
+            <p style="font-size:var(--text-body-sm);color:var(--color-text-muted);margin:0 0 var(--space-5)">Create your first portfolio piece to get started.</p>
+            <button class="btn btn--primary btn--sm">Add Project</button>
+          </div>
+          <div>
+            <p style="font-size:var(--text-label);text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);margin-bottom:var(--space-4)">Loading</p>
+            <div class="spinner" role="status" aria-label="Loading"></div>
+            <div class="skeleton-group" style="margin-top:var(--space-5)">
+              <div class="skeleton skeleton-title"></div>
+              <div class="skeleton skeleton-line"></div>
+              <div class="skeleton skeleton-line"></div>
+            </div>
+          </div>
+          <div>
+            <p style="font-size:var(--text-label);text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);margin-bottom:var(--space-4)">Error Banner</p>
+            <div class="alert alert--error" style="margin:0">
+              <div class="alert__title-row">
+                <i data-lucide="alert-circle" class="alert__icon" aria-hidden="true"></i>
+                <strong>Connection lost</strong>
+              </div>
+              <p class="alert__message">Check your network and try again.</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:var(--space-8)">
+          <span class="preview-tag">Illustration Placeholder</span>
+          <div class="illustration-placeholder">Animation or SVG illustration cannot be generated.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Imagery -->
+    <section class="section" id="imagery">
+      <div class="container">
+        <span class="preview-tag">§12 Imagery</span>
+        <h2 class="section-title">Image Treatments</h2>
+        <p class="section-desc">Grayscale portrait grid and 4:3 thumbnails. Unsplash stock with descriptive alt text.</p>
+        <div class="image-row">
+          <div class="img-card">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop" alt="Designer portrait, grayscale treatment">
+          </div>
+          <div class="img-card">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=300&fit=crop" alt="Creative director portrait, grayscale treatment">
+          </div>
+          <div class="img-placeholder">Placeholder<br>3:4 ratio</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Icons -->
+    <section class="section theme-accent" id="icons">
+      <div class="container">
+        <span class="preview-tag">§12 Iconography</span>
+        <h2 class="section-title">Lucide Icons</h2>
+        <div class="icon-row">
+          <div class="icon-item"><i data-lucide="layout-grid" style="width:16px;height:16px"></i>16px</div>
+          <div class="icon-item"><i data-lucide="type" style="width:20px;height:20px"></i>20px</div>
+          <div class="icon-item"><i data-lucide="image" style="width:24px;height:24px"></i>24px</div>
+          <div class="icon-item"><i data-lucide="play" style="width:24px;height:24px"></i>24px</div>
+          <div class="icon-item"><i data-lucide="arrow-right" style="width:24px;height:24px"></i>24px</div>
+          <div class="icon-item"><i data-lucide="eye" style="width:24px;height:24px"></i>24px</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Effects -->
+    <section class="section" id="effects">
+      <div class="container">
+        <span class="preview-tag">§10 Effects</span>
+        <h2 class="section-title">Shadows, Borders & Surfaces</h2>
+        <div class="surface-row">
+          <div class="surface-box" style="background:var(--color-surface);box-shadow:var(--shadow-sm)">--shadow-sm</div>
+          <div class="surface-box" style="background:var(--color-surface);box-shadow:var(--shadow-md)">--shadow-md</div>
+          <div class="surface-box" style="background:var(--color-surface);box-shadow:var(--shadow-lg)">--shadow-lg</div>
+          <div class="surface-box" style="background:var(--color-surface);box-shadow:var(--shadow-xl)">--shadow-xl</div>
+          <div class="surface-box" style="background:var(--color-surface);border:1px solid var(--color-border)">hairline</div>
+          <div class="surface-box" style="background:var(--color-surface);border:2px solid var(--color-border-strong)">strong</div>
+        </div>
+        <div class="radius-row">
+          <div class="radius-demo" style="border-radius:var(--radius-sm)">sm 4px</div>
+          <div class="radius-demo" style="border-radius:var(--radius-md)">md 8px</div>
+          <div class="radius-demo" style="border-radius:var(--radius-lg)">lg 16px</div>
+          <div class="radius-demo radius-demo--full" style="border-radius:var(--radius-full)">full</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Motion -->
+    <section class="section theme-dark" id="motion">
+      <div class="container">
+        <span class="preview-tag">§11 Motion</span>
+        <h2 class="section-title">Interaction</h2>
+        <p class="section-desc">Hover this card to see elevation and transform transitions. Respects prefers-reduced-motion.</p>
+        <div class="motion-card">
+          <h3>Hover Elevation</h3>
+          <p>200ms ease-out on shadow, transform, and border.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">Bold Canvas Design System — Original work inspired by editorial portfolio marketing patterns.</div>
+  </footer>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <button class="modal-close" id="close-modal" aria-label="Close dialog">
+        <i data-lucide="x" style="width:20px;height:20px"></i>
+      </button>
+      <h2 id="modal-title" style="font-size:var(--text-heading-md);margin:0 0 var(--space-4)">Compare Editions</h2>
+      <p style="color:var(--color-text-secondary);margin:0 0 var(--space-6)">Choose the plan that fits your studio. All editions include core portfolio features.</p>
+      <div class="btn-row">
+        <button class="btn btn--primary">Single</button>
+        <button class="btn btn--ghost">Studio</button>
+        <button class="btn btn--ghost">Business</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script>
+    lucide.createIcons();
+
+    const backdrop = document.getElementById('modal-backdrop');
+    const openBtn = document.getElementById('open-modal');
+    const closeBtn = document.getElementById('close-modal');
+    let lastFocus;
+
+    openBtn.addEventListener('click', () => {
+      lastFocus = document.activeElement;
+      backdrop.classList.add('is-open');
+      closeBtn.focus();
+    });
+
+    function closeModal() {
+      backdrop.classList.remove('is-open');
+      if (lastFocus) lastFocus.focus();
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && backdrop.classList.contains('is-open')) closeModal();
+    });
+
+    document.querySelectorAll('[data-select]').forEach((selectEl) => {
+      const trigger = selectEl.querySelector('.select-trigger');
+      const menu = selectEl.querySelector('.select-menu');
+      const valueEl = selectEl.querySelector('.select-value');
+      const hiddenInput = selectEl.querySelector('input[type="hidden"]');
+      const options = [...selectEl.querySelectorAll('.select-option')];
+
+      function openSelect() {
+        selectEl.classList.add('is-open');
+        trigger.setAttribute('aria-expanded', 'true');
+        menu.hidden = false;
+      }
+
+      function closeSelect() {
+        selectEl.classList.remove('is-open');
+        trigger.setAttribute('aria-expanded', 'false');
+        menu.hidden = true;
+        trigger.focus();
+      }
+
+      function selectOption(option) {
+        options.forEach((opt) => {
+          const selected = opt === option;
+          opt.classList.toggle('is-selected', selected);
+          opt.setAttribute('aria-selected', selected ? 'true' : 'false');
+        });
+        valueEl.textContent = option.textContent;
+        hiddenInput.value = option.dataset.value;
+        closeSelect();
+      }
+
+      trigger.addEventListener('click', () => {
+        if (selectEl.classList.contains('is-open')) closeSelect();
+        else openSelect();
+      });
+
+      options.forEach((option) => {
+        option.addEventListener('click', () => selectOption(option));
+      });
+
+      trigger.addEventListener('keydown', (e) => {
+        const currentIndex = options.findIndex((opt) => opt.classList.contains('is-selected'));
+
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (!selectEl.classList.contains('is-open')) openSelect();
+          const next = e.key === 'ArrowDown'
+            ? Math.min(currentIndex + 1, options.length - 1)
+            : Math.max(currentIndex - 1, 0);
+          options[next].focus();
+        }
+
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (!selectEl.classList.contains('is-open')) openSelect();
+          else {
+            const focused = document.activeElement;
+            if (focused.classList.contains('select-option')) selectOption(focused);
+          }
+        }
+
+        if (e.key === 'Escape') closeSelect();
+      });
+
+      menu.addEventListener('keydown', (e) => {
+        const focusedIndex = options.indexOf(document.activeElement);
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          options[Math.min(focusedIndex + 1, options.length - 1)].focus();
+        }
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          options[Math.max(focusedIndex - 1, 0)].focus();
+        }
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (document.activeElement.classList.contains('select-option')) {
+            selectOption(document.activeElement);
+          }
+        }
+        if (e.key === 'Escape') closeSelect();
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!selectEl.contains(e.target) && selectEl.classList.contains('is-open')) closeSelect();
+      });
+    });
+
+    const heroVideo = document.getElementById('ds-hero-video');
+    const heroCanvas = document.getElementById('ds-hero-freeze-canvas');
+
+    if (heroVideo && heroCanvas) {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        heroVideo.pause();
+        heroVideo.removeAttribute('autoplay');
+      } else {
+        let frozen = false;
+
+        const freezeToCanvas = () => {
+          if (frozen || !heroVideo.videoWidth || !Number.isFinite(heroVideo.duration)) return;
+          frozen = true;
+
+          heroCanvas.width = heroVideo.videoWidth;
+          heroCanvas.height = heroVideo.videoHeight;
+          heroCanvas.getContext('2d').drawImage(heroVideo, 0, 0);
+
+          heroCanvas.classList.add('is-visible');
+          heroVideo.classList.add('is-hidden');
+          heroVideo.pause();
+        };
+
+        heroVideo.addEventListener('timeupdate', () => {
+          if (frozen || !heroVideo.duration) return;
+          if (heroVideo.currentTime >= heroVideo.duration - 0.35) {
+            freezeToCanvas();
+          }
+        });
+      }
+    }
+  </script>
+</body>
+</html>
