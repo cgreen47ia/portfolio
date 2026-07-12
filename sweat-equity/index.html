@@ -448,11 +448,11 @@
 
     .design-showcase__media {
       margin: 0;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      border: 1px solid var(--color-border);
-      box-shadow: var(--shadow-lg);
-      background: var(--color-surface-muted);
+      border-radius: 0;
+      overflow: visible;
+      border: none;
+      box-shadow: none;
+      background: transparent;
     }
 
     .design-showcase__media img {
@@ -485,7 +485,86 @@
       margin: var(--space-6) 0 var(--space-7);
     }
 
+    .process-figures--row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: calc(var(--space-8) + 50px);
+      align-items: start;
+      width: min(100vw - 2 * var(--section-padding-x), calc(var(--container-narrow) + 280px));
+      max-width: none;
+      margin-left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .process-figures--row .process-figure {
+      min-width: 0;
+      width: 100%;
+      max-width: 100%;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+    }
+
+    .process-figures--row .process-figure img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .process-figures--row .process-figure--larger {
+      overflow: visible;
+    }
+
+    .process-figures--row .process-figure--larger img {
+      width: 110%;
+      max-width: none;
+    }
+
+    .process-figure figcaption {
+      margin: 0 0 var(--space-4);
+      font-size: calc(var(--text-body-sm) + 2px);
+      font-weight: 700;
+      color: var(--color-ink);
+      letter-spacing: 0.02em;
+    }
+
+    @media (max-width: 767px) {
+      .process-figures--row {
+        grid-template-columns: 1fr;
+        width: 100%;
+        margin-left: 0;
+        transform: none;
+        gap: var(--space-5);
+      }
+
+      .process-figures--row .process-figure--larger img {
+        width: 110%;
+      }
+    }
+
     .process-figure {
+      margin: 0;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-lg);
+      background: var(--color-surface-muted);
+    }
+
+    .process-figure--overview {
+      margin: 0 0 var(--space-8);
+      background: var(--color-surface);
+    }
+
+    .process-figure--captioned {
+      border: none;
+      box-shadow: none;
+      background: transparent;
+      overflow: visible;
+    }
+
+    .process-figure--captioned .process-figure__media {
       margin: 0;
       border-radius: var(--radius-lg);
       overflow: hidden;
@@ -574,8 +653,8 @@
         <li><a href="../#about">About</a></li>
         <li><a href="../#contact">Contact</a></li>
       </ul>
-      <a href="../#projects" class="btn btn--primary btn--pill nav__cta">
-        View Work
+      <a href="https://www.linkedin.com/in/courtney-green/" class="btn btn--primary btn--pill nav__cta" target="_blank" rel="noopener noreferrer">
+        Connect on LinkedIn
         <i data-lucide="arrow-right" style="width:16px;height:16px" aria-hidden="true"></i>
       </a>
       <button class="nav__menu-btn" id="menu-open" aria-label="Open menu" aria-expanded="false">
@@ -657,62 +736,61 @@
       <div class="container container--narrow">
         <p class="eyebrow">Process</p>
         <h2 class="section-title" id="process-heading">Process</h2>
-        <ol class="process-pipeline" aria-label="Design and build workflow">
-          <li class="process-pipeline__step">4 User Tasks</li>
-          <li class="process-pipeline__arrow" aria-hidden="true"><i data-lucide="chevron-right" style="width:16px;height:16px"></i></li>
-          <li class="process-pipeline__step">User Flows</li>
-          <li class="process-pipeline__arrow" aria-hidden="true"><i data-lucide="chevron-right" style="width:16px;height:16px"></i></li>
-          <li class="process-pipeline__step">Site Map</li>
-          <li class="process-pipeline__arrow" aria-hidden="true"><i data-lucide="chevron-right" style="width:16px;height:16px"></i></li>
-          <li class="process-pipeline__step">Moodboard</li>
-          <li class="process-pipeline__arrow" aria-hidden="true"><i data-lucide="chevron-right" style="width:16px;height:16px"></i></li>
-          <li class="process-pipeline__step">Design System</li>
-          <li class="process-pipeline__arrow" aria-hidden="true"><i data-lucide="chevron-right" style="width:16px;height:16px"></i></li>
-          <li class="process-pipeline__step">Create &amp; Iterate in Cursor</li>
-          <li class="process-pipeline__arrow" aria-hidden="true"><i data-lucide="chevron-right" style="width:16px;height:16px"></i></li>
-          <li class="process-pipeline__step">Database Setup</li>
-          <li class="process-pipeline__arrow" aria-hidden="true"><i data-lucide="chevron-right" style="width:16px;height:16px"></i></li>
-          <li class="process-pipeline__step">Iterate More</li>
-          <li class="process-pipeline__arrow" aria-hidden="true"><i data-lucide="chevron-right" style="width:16px;height:16px"></i></li>
-          <li class="process-pipeline__step">Testing</li>
-          <li class="process-pipeline__arrow" aria-hidden="true"><i data-lucide="chevron-right" style="width:16px;height:16px"></i></li>
-          <li class="process-pipeline__step">Deploy to Netlify</li>
-        </ol>
+        <figure class="process-figure process-figure--overview">
+          <img src="assets/process_illustration.png" alt="Illustrated 10-step process: 4 user tasks, user flows, site map, moodboard, design system, create and iterate in Cursor, database setup, iterate more, testing, and deploy to Netlify" width="1536" height="1024">
+        </figure>
         <div class="prose">
           <p>From an app idea, I defined 4 distinct user tasks: log workouts, view, favorite, and prioritize mentorship opportunities, view progress towards mentorships, and redeem points for a mentorship session. These tasks shaped the core motivation loop — activity, reward, opportunity — and became the foundation for detailed user flows covering user actions, system responses, and the screens needed at each step.</p>
 
-          <div class="process-figures">
-            <figure class="process-figure">
+          <div class="process-figures process-figures--row">
+            <figure class="process-figure process-figure--larger">
+              <figcaption>User Flow for Task 1</figcaption>
               <img src="assets/user_flow_1.png" alt="User flow diagram for logging workouts and earning points" width="1772" height="1685">
             </figure>
-            <figure class="process-figure">
-              <img src="assets/user_flow_4.png" alt="User flow diagram for redeeming points for a mentorship session" width="1015" height="1587">
+            <figure class="process-figure process-figure--smaller">
+              <figcaption>User Flow for Task 4.</figcaption>
+              <img src="assets/user_flow_2.png" alt="User flow diagram for redeeming points for a mentorship session" width="1015" height="1587">
             </figure>
           </div>
 
-          <p>I then created a site map showing how the home, mentorship, and workout pages connect across mobile and desktop layouts. From there, I converted the user flows and site map into markdown descriptives that AI could parse and use as build context.</p>
+          <p>I then created a site map showing how the home, mentorship, and workout pages connect across mobile and desktop layouts.</p>
 
           <div class="process-figures">
-            <figure class="process-figure">
-              <img src="assets/site-map.png" alt="Site map showing Sweat Equity pages and how they relate" width="1552" height="1805">
-            </figure>
-            <figure class="process-figure">
-              <img src="assets/descriptives_user_flow.png" alt="Markdown descriptives of user flows for AI parsing" width="2497" height="1540">
+            <figure class="process-figure process-figure--captioned">
+              <figcaption>Site Map</figcaption>
+              <div class="process-figure__media">
+                <img src="assets/site-map.png" alt="Site map showing Sweat Equity pages and how they relate" width="1545" height="1727">
+              </div>
             </figure>
           </div>
+
+          <p>From there, I converted the user flows and site map into markdown descriptives that AI could parse and use as build context.</p>
+
+          <figure class="process-figure process-figure--captioned">
+            <figcaption>Text-based user flow for AI use</figcaption>
+            <div class="process-figure__media">
+              <img src="assets/descriptives_user_flow.png" alt="Markdown descriptives of user flows for AI parsing" width="2497" height="1540">
+            </div>
+          </figure>
 
           <p>I then created multiple UI designs through sketching ideation, creating at least 5 design options per screen. I then evaluated the sketches and chose one winning sketch per screen.</p>
 
-          <figure class="process-figure">
-            <img src="assets/final_sketches_all.png" alt="Sketched UI design options evaluated for each Sweat Equity screen" width="2732" height="1767">
+          <figure class="process-figure process-figure--captioned">
+            <figcaption>Final Sketch Decisions</figcaption>
+            <div class="process-figure__media">
+              <img src="assets/final_sketch_decisions_all.png" alt="Final sketch decisions with sticky-note requirements and hand-drawn wireframes for each Sweat Equity screen" width="4106" height="2944">
+            </div>
           </figure>
 
           <p>I applied the Bold Canvas design system as the styling source of truth, using high-contrast accent fields, strong typographic hierarchy, and mobile-first spacing so progress and rewards feel visible without cluttering the interface.</p>
 
           <p>Next, the application needed a design system. I created a moodboard to capture the look and feel I wanted the application to have. Next, I prompted cursor to create a design system based on this moodboard across multiple prompts, resulting in a DESIGN.md file. Both light and dark themes are reflected in this design system.</p>
 
-          <figure class="process-figure">
-            <img src="assets/moodboard.png" alt="Moodboard capturing the look and feel for the Sweat Equity design system" width="2035" height="1550">
+          <figure class="process-figure process-figure--captioned">
+            <figcaption>Moodboard for Design System Creation</figcaption>
+            <div class="process-figure__media">
+              <img src="assets/moodboard.png" alt="Moodboard capturing the look and feel for the Sweat Equity design system" width="2035" height="1550">
+            </div>
           </figure>
 
           <p>I then constructed a PLAN.md file which included prompts that would create the application structure, user flows, screen elements, design system, and database schema. I then executed this plan and the app was created. From there, many iterations were made to improve user flows, remove bugs, and improve consistency and user experience.</p>

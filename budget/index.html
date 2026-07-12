@@ -459,11 +459,11 @@
 
     .design-showcase__media {
       margin: 0;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      border: 1px solid var(--color-border);
-      box-shadow: var(--shadow-lg);
-      background: var(--color-surface-muted);
+      border-radius: 0;
+      overflow: visible;
+      border: none;
+      box-shadow: none;
+      background: transparent;
     }
 
     .design-showcase__media img {
@@ -479,7 +479,79 @@
       margin: var(--space-6) 0 var(--space-7);
     }
 
+    .process-figures--row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: calc(var(--space-8) + 50px);
+      align-items: start;
+      width: min(100vw - 2 * var(--section-padding-x), calc(var(--container-narrow) + 280px));
+      max-width: none;
+      margin-left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .process-figures--row .process-figure {
+      min-width: 0;
+      width: 100%;
+      max-width: 100%;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+      overflow: visible;
+    }
+
+    .process-figures--row .process-figure img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .process-figures--row .process-figure--smaller img {
+      width: 80%;
+      max-width: none;
+    }
+
+    .process-figure figcaption {
+      margin: 0 0 var(--space-4);
+      font-size: calc(var(--text-body-sm) + 2px);
+      font-weight: 700;
+      color: var(--color-ink);
+      letter-spacing: 0.02em;
+    }
+
+    @media (max-width: 767px) {
+      .process-figures--row {
+        grid-template-columns: 1fr;
+        width: 100%;
+        margin-left: 0;
+        transform: none;
+        gap: var(--space-5);
+      }
+    }
+
     .process-figure {
+      margin: 0;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-lg);
+      background: var(--color-surface-muted);
+    }
+
+    .process-figure--overview {
+      margin: 0 0 var(--space-8);
+      background: var(--color-surface);
+    }
+
+    .process-figure--captioned {
+      border: none;
+      box-shadow: none;
+      background: transparent;
+      overflow: visible;
+    }
+
+    .process-figure--captioned .process-figure__media {
       margin: 0;
       border-radius: var(--radius-lg);
       overflow: hidden;
@@ -568,8 +640,8 @@
         <li><a href="../#about">About</a></li>
         <li><a href="../#contact">Contact</a></li>
       </ul>
-      <a href="../#projects" class="btn btn--primary btn--pill nav__cta">
-        View Work
+      <a href="https://www.linkedin.com/in/courtney-green/" class="btn btn--primary btn--pill nav__cta" target="_blank" rel="noopener noreferrer">
+        Connect on LinkedIn
         <i data-lucide="arrow-right" style="width:16px;height:16px" aria-hidden="true"></i>
       </a>
       <button class="nav__menu-btn" id="menu-open" aria-label="Open menu" aria-expanded="false">
@@ -649,27 +721,19 @@
       <div class="container container--narrow">
         <p class="eyebrow">Process</p>
         <h2 class="section-title" id="process-heading">Process</h2>
-        <ol class="process-pipeline" aria-label="Design and build workflow">
-          <li class="process-pipeline__step">3 User Tasks</li>
-          <li class="process-pipeline__arrow" aria-hidden="true"><i data-lucide="chevron-right" style="width:16px;height:16px"></i></li>
-          <li class="process-pipeline__step">User Flows</li>
-          <li class="process-pipeline__arrow" aria-hidden="true"><i data-lucide="chevron-right" style="width:16px;height:16px"></i></li>
-          <li class="process-pipeline__step">Site Map</li>
-          <li class="process-pipeline__arrow" aria-hidden="true"><i data-lucide="chevron-right" style="width:16px;height:16px"></i></li>
-          <li class="process-pipeline__step">Design System</li>
-          <li class="process-pipeline__arrow" aria-hidden="true"><i data-lucide="chevron-right" style="width:16px;height:16px"></i></li>
-          <li class="process-pipeline__step">Iterations in Cursor</li>
-          <li class="process-pipeline__arrow" aria-hidden="true"><i data-lucide="chevron-right" style="width:16px;height:16px"></i></li>
-          <li class="process-pipeline__step">Deploy to Netlify</li>
-        </ol>
+        <figure class="process-figure process-figure--overview">
+          <img src="assets/process_illustration.png" alt="Illustrated process steps for the Monthly Budget Web App" width="1536" height="1024">
+        </figure>
         <div class="prose">
           <p>From an app idea, I created 3 distinct user tasks that users would need to conduct in order to support the app idea. These tasks include entering a monthly income, adding expenses to a category, and adjusting category limits when overspending occurs. From these tasks, I created detailed user flows, detailing user actions, system actions, and screens to support each task.</p>
 
-          <div class="process-figures">
+          <div class="process-figures process-figures--row">
             <figure class="process-figure">
+              <figcaption>User Flow for Task 1</figcaption>
               <img src="assets/user_flow_1.png" alt="User flow diagram for entering monthly income" width="1697" height="1770">
             </figure>
-            <figure class="process-figure">
+            <figure class="process-figure process-figure--smaller">
+              <figcaption>User Flow for Task 2</figcaption>
               <img src="assets/budget_user_flow_2.png" alt="User flow diagram for adding expenses and adjusting category limits" width="1167" height="1605">
             </figure>
           </div>
@@ -677,18 +741,27 @@
           <p>I then created a site map, showing the pages, their sections, and how the pages are related. From here, I converted these user flows and site map into a descriptive version in markdown format that AI can parse and understand.</p>
 
           <div class="process-figures">
-            <figure class="process-figure">
-              <img src="assets/site_map_budget.png" alt="Site map showing budget app pages and how they relate" width="1875" height="1712">
+            <figure class="process-figure process-figure--captioned">
+              <figcaption>Site Map</figcaption>
+              <div class="process-figure__media">
+                <img src="assets/site_map_budget.png" alt="Site map showing budget app pages and how they relate" width="1875" height="1712">
+              </div>
             </figure>
-            <figure class="process-figure">
-              <img src="assets/descriptives_budget.png" alt="Markdown descriptives of user flows and site map for AI parsing" width="1917" height="862">
+            <figure class="process-figure process-figure--captioned">
+              <figcaption>Text-based user flow for AI use</figcaption>
+              <div class="process-figure__media">
+                <img src="assets/descriptives_budget.png" alt="Markdown descriptives of user flows and site map for AI parsing" width="1917" height="862">
+              </div>
             </figure>
           </div>
 
           <p>I then created a skill in Cursor that can convert any existing website into a design system. The skill does not include proprietary designs from these web pages. I used this skill to convert Nerd Wallet's web design into a design system, which resulted in the creation of a DESIGN.md file. This file served as the styling and design system source of truth for this application.</p>
 
-          <figure class="process-figure">
-            <img src="assets/budget_design_system.png" alt="Veridian Compass design system documentation used as the styling source of truth" width="2162" height="1960">
+          <figure class="process-figure process-figure--captioned">
+            <figcaption>Design System created for this project</figcaption>
+            <div class="process-figure__media">
+              <img src="assets/budget_design_system.png" alt="Veridian Compass design system documentation used as the styling source of truth" width="2162" height="1960">
+            </div>
           </figure>
 
           <p>From here, using the text descriptives, I prompted Cursor to create the application one step at a time, by creating site pages and user flows. I then iterated on the designs by ensuring the user flows worked without bugs and by making changes to the output. Once complete, I deployed the application to Netlify.</p>

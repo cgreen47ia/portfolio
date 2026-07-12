@@ -328,11 +328,55 @@
 
     /* Hero */
     .hero {
+      position: relative;
+      overflow: hidden;
       background: var(--color-accent);
-      padding: var(--section-padding-y) 0;
+      padding: calc(var(--section-padding-y) / 2) 0 var(--section-padding-y);
+    }
+
+    .hero__sweep {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero__sweep svg {
+      width: 120%;
+      max-width: none;
+      height: 70%;
+      margin-left: -5%;
+    }
+
+    .hero__sweep-path {
+      transform-origin: left center;
+    }
+
+    .hero__sweep-reveal {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      clip-path: inset(0 100% 0 0);
+      animation: hero-sweep-paint 2.4s var(--ease-out) 0.15s forwards;
+    }
+
+    @keyframes hero-sweep-paint {
+      to { clip-path: inset(0 0 0 0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero__sweep-reveal {
+        animation: none;
+        clip-path: inset(0 0 0 0);
+      }
     }
 
     .hero__grid {
+      position: relative;
+      z-index: 1;
       display: grid;
       gap: var(--space-7);
       align-items: center;
@@ -340,37 +384,23 @@
 
     @media (min-width: 768px) {
       .hero__grid {
-        grid-template-columns: 1fr 1fr;
-        gap: var(--space-8);
+        grid-template-columns: minmax(0, 1fr);
+        max-width: calc(42rem + 75px);
       }
     }
 
+    /* Dots animation kept but hidden while testing sweep effect */
     .hero__media {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: none;
     }
 
-    .hero__video,
-    .hero__freeze-canvas {
+    .hero__canvas {
       width: 100%;
       max-width: 780px;
+      aspect-ratio: 4 / 3;
       display: block;
       background: transparent;
       border-radius: var(--radius-lg);
-      filter: drop-shadow(0 12px 32px rgba(10, 10, 10, 0.12));
-    }
-
-    .hero__freeze-canvas {
-      display: none;
-    }
-
-    .hero__freeze-canvas.is-visible {
-      display: block;
-    }
-
-    .hero__video.is-hidden {
-      display: none;
     }
 
     .hero__headline {
@@ -379,7 +409,7 @@
       line-height: 1.05;
       letter-spacing: -0.02em;
       margin: 0 0 var(--space-6);
-      max-width: 20ch;
+      max-width: calc(20ch + 75px);
     }
 
     .hero__lead {
@@ -465,6 +495,17 @@
       margin-bottom: var(--space-3);
     }
 
+    .project-card__badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      margin-bottom: var(--space-3);
+    }
+
+    .project-card__badges .badge {
+      margin-bottom: 0;
+    }
+
     .badge--neutral { background: var(--color-surface-muted); color: var(--color-ink); }
     .badge--cta { background: var(--color-cta); color: #FFFFFF; }
     .badge--success { background: var(--color-success-bg); color: var(--color-success); }
@@ -536,69 +577,12 @@
     .about__text p:last-child { margin-bottom: 0; }
 
     /* Contact */
-    .contact-grid {
-      display: grid;
-      gap: var(--space-8);
+    .contact-stack {
+      max-width: 65ch;
     }
 
-    @media (min-width: 768px) {
-      .contact-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: var(--space-9);
-      }
-    }
-
-    .contact-info a {
-      color: var(--color-blue);
-      text-decoration: none;
-    }
-
-    .contact-info a:hover { text-decoration: underline; }
-
-    .contact-info p {
-      color: var(--color-text-secondary);
-      margin: 0 0 var(--space-4);
-    }
-
-    .form-grid {
-      display: grid;
-      gap: var(--space-5);
-    }
-
-    .field label {
-      display: block;
-      font-size: var(--text-body-sm);
-      font-weight: 500;
-      text-transform: capitalize;
-      margin-bottom: 5px;
-    }
-
-    .field input,
-    .field textarea {
-      width: 100%;
-      font-family: var(--font-sans);
-      font-size: var(--text-body-md);
-      text-transform: capitalize;
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
-      background: var(--color-surface);
-      padding: var(--space-4);
-      transition: border-color var(--duration-normal);
-    }
-
-    .field input { height: 44px; }
-
-    .field textarea {
-      min-height: 120px;
-      resize: vertical;
-      text-transform: none;
-    }
-
-    .field input:focus,
-    .field textarea:focus {
-      border-color: var(--color-blue);
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(42, 95, 158, 0.2);
+    .contact-stack .section-lead {
+      margin-bottom: var(--space-7);
     }
 
     /* Footer */
@@ -663,8 +647,8 @@
         <li><a href="#about">About</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
-      <a href="#projects" class="btn btn--primary btn--pill nav__cta">
-        View Work
+      <a href="https://www.linkedin.com/in/courtney-green/" class="btn btn--primary btn--pill nav__cta" target="_blank" rel="noopener noreferrer">
+        Connect on LinkedIn
         <i data-lucide="arrow-right" style="width:16px;height:16px" aria-hidden="true"></i>
       </a>
       <button class="nav__menu-btn" id="menu-open" aria-label="Open menu" aria-expanded="false">
@@ -684,6 +668,35 @@
 
   <main>
     <section class="hero" aria-labelledby="hero-heading">
+      <div class="hero__sweep" aria-hidden="true">
+        <div class="hero__sweep-reveal">
+          <svg viewBox="0 0 1200 420" preserveAspectRatio="none" focusable="false">
+            <defs>
+              <linearGradient id="hero-sweep-gradient" x1="0%" y1="40%" x2="100%" y2="60%">
+                <stop offset="0%" stop-color="#C4451E"/>
+                <stop offset="35%" stop-color="#E8A800"/>
+                <stop offset="65%" stop-color="#FFC940"/>
+                <stop offset="100%" stop-color="#2A5F9E"/>
+              </linearGradient>
+            </defs>
+            <path
+              class="hero__sweep-path"
+              fill="url(#hero-sweep-gradient)"
+              d="M-40 320
+                 C 100 300, 200 280, 300 250
+                 C 420 210, 500 170, 600 140
+                 C 720 105, 840 70, 960 55
+                 C 1080 40, 1160 45, 1240 60
+                 L 1240 200
+                 C 1140 185, 1040 180, 940 195
+                 C 820 215, 720 250, 600 285
+                 C 480 320, 400 355, 280 375
+                 C 160 395, 60 400, -40 410
+                 Z"
+            />
+          </svg>
+        </div>
+      </div>
       <div class="container hero__grid">
         <div class="hero__content">
           <p class="eyebrow">Portfolio</p>
@@ -692,23 +705,19 @@
           <div class="hero__actions">
             <a href="#projects" class="btn btn--primary btn--pill">
               See Projects
-              <i data-lucide="arrow-right" style="width:16px;height:16px" aria-hidden="true"></i>
+              <i data-lucide="arrow-down" style="width:16px;height:16px" aria-hidden="true"></i>
             </a>
             <a href="#contact" class="btn btn--ghost btn--pill">Get In Touch</a>
           </div>
         </div>
-        <div class="hero__media">
-          <video
-            class="hero__video"
-            id="hero-video"
-            src="assets/hero-demo.webm"
-            autoplay
-            muted
-            preload="auto"
-            playsinline
-            aria-label="Portfolio project preview animation"
-          ></video>
-          <canvas class="hero__freeze-canvas" id="hero-freeze-canvas" aria-hidden="true"></canvas>
+        <!-- Dots animation preserved but hidden while testing sweep -->
+        <div class="hero__media" hidden>
+          <canvas
+            class="hero__canvas"
+            id="hero-dots"
+            role="img"
+            aria-label="Animated dots that gather into the shape of a laptop"
+          ></canvas>
         </div>
       </div>
     </section>
@@ -725,7 +734,12 @@
               <img src="sweat-equity/assets/cover_sweat_equity.png" alt="Sweat Equity project cover" width="600" height="450">
             </div>
             <div class="project-card__body">
-              <span class="badge badge--cta">Fitness</span>
+              <div class="project-card__badges">
+                <span class="badge badge--accent">Vibe Coding</span>
+                <span class="badge badge--info">React</span>
+                <span class="badge badge--success">Supabase</span>
+                <span class="badge badge--warning">Design System</span>
+              </div>
               <h3 class="project-card__title">Sweat Equity</h3>
               <p class="project-card__desc">A mobile-first web application that encourages students to exercise by cashing in exercise points for mentorship opportunities.</p>
               <span class="project-card__link">
@@ -735,14 +749,19 @@
             </div>
           </a>
 
-          <a href="space-station/" class="project-card">
+          <a href="space-station/index.html" class="project-card" aria-label="View International Space Station Tracker project">
             <div class="project-card__image">
               <img src="space-station/assets/cover_space_station.png" alt="International Space Station Tracker project cover" width="600" height="450">
             </div>
             <div class="project-card__body">
-              <span class="badge badge--info">Science</span>
+              <div class="project-card__badges">
+                <span class="badge badge--accent">Vibe Coding</span>
+                <span class="badge badge--success">Public API</span>
+                <span class="badge badge--warning">Design System</span>
+                <span class="badge badge--info">React</span>
+              </div>
               <h3 class="project-card__title">International Space Station Tracker</h3>
-              <p class="project-card__desc">Real-time orbital position and crew manifest for humanity's orbiting laboratory – updated from Open Notify public telemetry APIs.</p>
+              <p class="project-card__desc">Real-time orbital position and crew manifest for humanity's orbiting laboratory — updated from Open Notify public telemetry APIs.</p>
               <span class="project-card__link">
                 View project
                 <i data-lucide="arrow-right" style="width:16px;height:16px" aria-hidden="true"></i>
@@ -755,7 +774,11 @@
               <img src="budget/assets/cover_budget.png" alt="Monthly Budget Web App project cover" width="600" height="450">
             </div>
             <div class="project-card__body">
-              <span class="badge badge--warning">Finance</span>
+              <div class="project-card__badges">
+                <span class="badge badge--accent">Vibe Coding</span>
+                <span class="badge badge--info">React</span>
+                <span class="badge badge--warning">Design System</span>
+              </div>
               <h3 class="project-card__title">Monthly Budget Web App</h3>
               <p class="project-card__desc">A personal finance tracker for monitoring spending, setting category limits, and staying on top of monthly goals.</p>
               <span class="project-card__link">
@@ -765,12 +788,15 @@
             </div>
           </a>
 
-          <a href="inspections/" class="project-card">
+          <a href="inspections/index.html" class="project-card" aria-label="View Mobile Inspections App project">
             <div class="project-card__image">
               <img src="inspections/assets/cover_inspections.png" alt="Mobile Inspections App project cover" width="600" height="450">
             </div>
             <div class="project-card__body">
-              <span class="badge badge--accent">Facilities</span>
+              <div class="project-card__badges">
+                <span class="badge badge--accent">Vibe Coding</span>
+                <span class="badge badge--info">React</span>
+              </div>
               <h3 class="project-card__title">Mobile Inspections App</h3>
               <p class="project-card__desc">A field inspection tool for creating and capturing checklists and notes during property or quality reviews.</p>
               <span class="project-card__link">
@@ -787,45 +813,33 @@
       <div class="container">
         <p class="eyebrow eyebrow--inverse">About</p>
         <div class="about-grid">
-          <h2 class="about__serif" id="about-heading">Learning by building, one project at a time.</h2>
+          <h2 class="about__serif" id="about-heading">Hi, I'm Courtney.</h2>
           <div class="about__text">
-            <p>I'm a vibe coding student exploring how far curiosity and modern tools can take an idea — from rough concept to working prototype.</p>
-            <p>Each project in this portfolio started with a simple question: what if I built something useful, learned along the way, and let design guide the result? Bold Canvas, my design system, keeps every interface consistent and intentional.</p>
-            <p>When I'm not coding, I'm sketching layouts, refining typography, and looking for the next problem worth solving.</p>
+            <p>I've been a User Experience professional for 7+ years. Prior to UX, I had a varied tech career spanning Quality Assurance, Software Development, and Tech Support so I know how to interact with people from various technical disciplines.</p>
+            <p>I'm currently leading a UX Research team supporting an agentic AI platform experience across multiple enterprise software products (for 3D analysis/design, construction, operations products).</p>
+            <p>I'm also pursuing my Master's in Human Computer Interaction from Iowa State University.</p>
           </div>
         </div>
       </div>
     </section>
 
     <section class="section" id="contact" aria-labelledby="contact-heading">
-      <div class="container">
+      <div class="container container--narrow">
         <p class="eyebrow">Contact</p>
         <h2 class="section-title" id="contact-heading">Let's connect</h2>
 
-        <div class="contact-grid">
-          <div class="contact-info">
-            <p class="section-lead" style="margin-bottom:var(--space-6)">Have feedback on a project, a collaboration idea, or just want to say hello? Send a message — I'd love to hear from you.</p>
-            <p><strong>Email</strong><br><a href="mailto:cgreen47@iastate.edu">cgreen47@iastate.edu</a></p>
+        <div class="contact-stack">
+          <p class="section-lead">Have feedback on a project, a collaboration idea, or just want to say hello? I'd love to hear from you.</p>
+          <div class="hero__actions">
+            <a href="mailto:cgreen47@iastate.edu" class="btn btn--primary btn--pill">
+              Email Me
+              <i data-lucide="mail" style="width:16px;height:16px" aria-hidden="true"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/courtney-green/" class="btn btn--secondary btn--pill" target="_blank" rel="noopener noreferrer">
+              Connect on LinkedIn
+              <i data-lucide="external-link" style="width:16px;height:16px" aria-hidden="true"></i>
+            </a>
           </div>
-
-          <form class="form-grid" action="#" method="post">
-            <div class="field">
-              <label for="name">Full Name</label>
-              <input type="text" id="name" name="name" placeholder="Enter your name" autocomplete="name" required>
-            </div>
-            <div class="field">
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" placeholder="Enter your email" autocomplete="email" required>
-            </div>
-            <div class="field">
-              <label for="message">Message</label>
-              <textarea id="message" name="message" placeholder="What's on your mind?" required></textarea>
-            </div>
-            <button type="submit" class="btn btn--primary btn--pill">
-              Send Message
-              <i data-lucide="arrow-right" style="width:16px;height:16px" aria-hidden="true"></i>
-            </button>
-          </form>
         </div>
       </div>
     </section>
@@ -879,37 +893,304 @@
       if (window.innerWidth >= 768 && overlay.classList.contains('is-open')) closeMenu();
     });
 
-    const heroVideo = document.getElementById('hero-video');
-    const heroCanvas = document.getElementById('hero-freeze-canvas');
+    (function initHeroDots() {
+      const canvas = document.getElementById('hero-dots');
+      // Kept for later — skip while media is hidden for the sweep experiment
+      if (!canvas || canvas.closest('[hidden]') || canvas.offsetParent === null) return;
 
-    if (heroVideo && heroCanvas) {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        heroVideo.pause();
-        heroVideo.removeAttribute('autoplay');
-      } else {
-        let frozen = false;
+      const ctx = canvas.getContext('2d');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const PARTICLE_COUNT = 1400;
+      const DURATION = 6000;
+      const COLORS = ['#0A0A0A', '#0A0A0A', '#0A0A0A', '#0A0A0A', '#1E4578', '#C4451E'];
 
-        const freezeToCanvas = () => {
-          if (frozen || !heroVideo.videoWidth || !Number.isFinite(heroVideo.duration)) return;
-          frozen = true;
+      let width = 0;
+      let height = 0;
+      let dpr = 1;
+      let particles = [];
+      let startTime = null;
+      let rafId = null;
 
-          heroCanvas.width = heroVideo.videoWidth;
-          heroCanvas.height = heroVideo.videoHeight;
-          heroCanvas.getContext('2d').drawImage(heroVideo, 0, 0);
-
-          heroCanvas.classList.add('is-visible');
-          heroVideo.classList.add('is-hidden');
-          heroVideo.pause();
-        };
-
-        heroVideo.addEventListener('timeupdate', () => {
-          if (frozen || !heroVideo.duration) return;
-          if (heroVideo.currentTime >= heroVideo.duration - 0.35) {
-            freezeToCanvas();
-          }
-        });
+      function easeInOutCubic(t) {
+        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
       }
-    }
+
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
+
+      function sampleLaptopTargets(count, w, h) {
+        const targets = [];
+        const cx = w * 0.5;
+        const cy = h * 0.48;
+        const scale = Math.min(w, h) * 0.88;
+
+        // Open laptop (front view): screen lid + hinge + trapezoid base
+        const screen = { x: -0.36, y: -0.42, w: 0.72, h: 0.48 };
+        const bezel = 0.045;
+        const hinge = { x: -0.38, y: 0.065, w: 0.76, h: 0.028 };
+        // Base widens toward the front (trapezoid)
+        const baseTopY = 0.1;
+        const baseBottomY = 0.34;
+        const baseTopHalf = 0.4;
+        const baseBottomHalf = 0.52;
+        const trackpad = { x: -0.1, y: 0.16, w: 0.2, h: 0.1 };
+
+        function toWorld(nx, ny) {
+          return { x: cx + nx * scale, y: cy + ny * scale };
+        }
+
+        function pushPoint(nx, ny) {
+          targets.push(toWorld(nx, ny));
+        }
+
+        function fillRect(rx, ry, rw, rh, spacing) {
+          for (let y = ry; y <= ry + rh; y += spacing) {
+            for (let x = rx; x <= rx + rw; x += spacing) {
+              const jitterX = (Math.random() - 0.5) * spacing * 0.35;
+              const jitterY = (Math.random() - 0.5) * spacing * 0.35;
+              pushPoint(x + jitterX, y + jitterY);
+            }
+          }
+        }
+
+        function fillTrapezoid(topY, bottomY, topHalf, bottomHalf, spacing) {
+          for (let y = topY; y <= bottomY; y += spacing) {
+            const t = (y - topY) / (bottomY - topY);
+            const half = lerp(topHalf, bottomHalf, t);
+            for (let x = -half; x <= half; x += spacing) {
+              const jitterX = (Math.random() - 0.5) * spacing * 0.35;
+              const jitterY = (Math.random() - 0.5) * spacing * 0.35;
+              pushPoint(x + jitterX, y + jitterY);
+            }
+          }
+        }
+
+        function strokeRect(rx, ry, rw, rh, spacing) {
+          // Top / bottom
+          for (let x = rx; x <= rx + rw; x += spacing) {
+            pushPoint(x, ry);
+            pushPoint(x, ry + rh);
+          }
+          // Left / right
+          for (let y = ry; y <= ry + rh; y += spacing) {
+            pushPoint(rx, y);
+            pushPoint(rx + rw, y);
+          }
+        }
+
+        // Screen fill (slightly lighter spacing so lid reads as a solid panel)
+        fillRect(screen.x + bezel, screen.y + bezel, screen.w - bezel * 2, screen.h - bezel * 2, 0.028);
+        // Thick bezel / frame for a crisp laptop lid outline
+        strokeRect(screen.x, screen.y, screen.w, screen.h, 0.016);
+        strokeRect(screen.x + bezel * 0.45, screen.y + bezel * 0.45, screen.w - bezel * 0.9, screen.h - bezel * 0.9, 0.018);
+        // Inner display edge
+        strokeRect(screen.x + bezel, screen.y + bezel, screen.w - bezel * 2, screen.h - bezel * 2, 0.02);
+        // Camera bump
+        fillRect(-0.02, screen.y + 0.012, 0.04, 0.018, 0.012);
+
+        // Hinge
+        fillRect(hinge.x, hinge.y, hinge.w, hinge.h, 0.016);
+
+        // Keyboard deck (perspective trapezoid)
+        fillTrapezoid(baseTopY, baseBottomY, baseTopHalf, baseBottomHalf, 0.024);
+        // Trapezoid outline for readability
+        for (let t = 0; t <= 1; t += 0.02) {
+          const y = lerp(baseTopY, baseBottomY, t);
+          const half = lerp(baseTopHalf, baseBottomHalf, t);
+          pushPoint(-half, y);
+          pushPoint(half, y);
+        }
+        for (let x = -baseTopHalf; x <= baseTopHalf; x += 0.016) pushPoint(x, baseTopY);
+        for (let x = -baseBottomHalf; x <= baseBottomHalf; x += 0.016) pushPoint(x, baseBottomY);
+
+        // Trackpad
+        fillRect(trackpad.x, trackpad.y, trackpad.w, trackpad.h, 0.018);
+        strokeRect(trackpad.x, trackpad.y, trackpad.w, trackpad.h, 0.014);
+
+        // Shuffle then trim / pad to exact count
+        for (let i = targets.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          const tmp = targets[i];
+          targets[i] = targets[j];
+          targets[j] = tmp;
+        }
+
+        if (targets.length >= count) {
+          return targets.slice(0, count);
+        }
+
+        while (targets.length < count) {
+          const t = targets[Math.floor(Math.random() * targets.length)];
+          targets.push({
+            x: t.x + (Math.random() - 0.5) * 3,
+            y: t.y + (Math.random() - 0.5) * 3,
+          });
+        }
+        return targets;
+      }
+
+      function createParticles(w, h) {
+        const targets = sampleLaptopTargets(PARTICLE_COUNT, w, h);
+        const cx = w * 0.5;
+        const cy = h * 0.5;
+        const list = [];
+
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const radius = Math.min(w, h) * (0.15 + Math.random() * 0.45);
+          const orbitAngle = (i / PARTICLE_COUNT) * Math.PI * 2;
+          const orbitRadius = Math.min(w, h) * (0.28 + (i % 7) * 0.018);
+
+          list.push({
+            x: cx + Math.cos(angle) * radius,
+            y: cy + Math.sin(angle) * radius,
+            chaosAngle: angle,
+            chaosRadius: radius,
+            chaosSpeed: 0.6 + Math.random() * 1.4,
+            chaosDir: Math.random() < 0.5 ? 1 : -1,
+            chaosWobble: 0.5 + Math.random() * 1.5,
+            orbitAngle,
+            orbitRadius,
+            orbitSpeed: 0.4 + Math.random() * 0.3,
+            targetX: targets[i].x,
+            targetY: targets[i].y,
+            size: 2.8 + Math.random() * 3.6,
+            color: COLORS[i % COLORS.length],
+            phaseOffset: Math.random() * Math.PI * 2,
+          });
+        }
+        return list;
+      }
+
+      function resize() {
+        const rect = canvas.getBoundingClientRect();
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        width = Math.max(1, Math.floor(rect.width));
+        height = Math.max(1, Math.floor(rect.height));
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        particles = createParticles(width, height);
+        if (reduceMotion) {
+          drawStatic();
+        }
+      }
+
+      function drawParticle(p, alpha) {
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      function drawStatic() {
+        ctx.clearRect(0, 0, width, height);
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.x = p.targetX;
+          p.y = p.targetY;
+          drawParticle(p, 0.92);
+        }
+        ctx.globalAlpha = 1;
+      }
+
+      function getChaosPos(p, tSec) {
+        const a = p.chaosAngle + tSec * p.chaosSpeed * p.chaosDir;
+        const r = p.chaosRadius + Math.sin(tSec * p.chaosWobble + p.phaseOffset) * 18;
+        return {
+          x: width * 0.5 + Math.cos(a) * r + Math.sin(tSec * 1.7 + p.phaseOffset) * 12,
+          y: height * 0.5 + Math.sin(a) * r + Math.cos(tSec * 1.3 + p.phaseOffset) * 12,
+        };
+      }
+
+      function getOrbitPos(p, tSec) {
+        const a = p.orbitAngle + tSec * p.orbitSpeed;
+        return {
+          x: width * 0.5 + Math.cos(a) * p.orbitRadius,
+          y: height * 0.5 + Math.sin(a) * p.orbitRadius,
+        };
+      }
+
+      function frame(now) {
+        if (startTime === null) startTime = now;
+        const elapsed = now - startTime;
+        const tSec = elapsed / 1000;
+
+        ctx.clearRect(0, 0, width, height);
+
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          let x;
+          let y;
+          let alpha = 0.85;
+
+          if (elapsed < 2000) {
+            // Chaos swirl
+            const pos = getChaosPos(p, tSec);
+            x = pos.x;
+            y = pos.y;
+          } else if (elapsed < 3600) {
+            // Ease chaos → organized orbit
+            const u = easeInOutCubic((elapsed - 2000) / 1600);
+            const chaos = getChaosPos(p, tSec);
+            const orbit = getOrbitPos(p, tSec);
+            x = lerp(chaos.x, orbit.x, u);
+            y = lerp(chaos.y, orbit.y, u);
+          } else if (elapsed < DURATION) {
+            // Ease orbit → laptop silhouette
+            const u = easeInOutCubic((elapsed - 3600) / 2400);
+            const orbit = getOrbitPos(p, tSec);
+            x = lerp(orbit.x, p.targetX, u);
+            y = lerp(orbit.y, p.targetY, u);
+            alpha = lerp(0.85, 0.95, u);
+          } else {
+            // Idle shimmer — stay as laptop, no sequence loop
+            const shimmer = Math.sin(tSec * 2.2 + p.phaseOffset) * 1.2;
+            const pulse = 0.88 + Math.sin(tSec * 1.6 + p.phaseOffset) * 0.08;
+            x = p.targetX + shimmer;
+            y = p.targetY + Math.cos(tSec * 1.9 + p.phaseOffset) * 1.1;
+            alpha = pulse;
+          }
+
+          p.x = x;
+          p.y = y;
+          drawParticle(p, alpha);
+        }
+
+        ctx.globalAlpha = 1;
+        rafId = requestAnimationFrame(frame);
+      }
+
+      resize();
+
+      if (reduceMotion) {
+        drawStatic();
+      } else {
+        rafId = requestAnimationFrame(frame);
+      }
+
+      let resizeTimer = null;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          const wasIdle = startTime !== null && (performance.now() - startTime) >= DURATION;
+          const progress = startTime === null ? 0 : performance.now() - startTime;
+          resize();
+          if (reduceMotion) {
+            drawStatic();
+            return;
+          }
+          // Preserve animation progress across resize
+          if (wasIdle || progress >= DURATION) {
+            startTime = performance.now() - DURATION;
+          } else if (startTime !== null) {
+            startTime = performance.now() - progress;
+          }
+        }, 120);
+      });
+    })();
   </script>
 </body>
 </html>

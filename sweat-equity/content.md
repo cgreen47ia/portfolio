@@ -33,7 +33,9 @@ Many students struggle to maintain consistent exercise habits with a busy schedu
 
 From an app idea, I defined 4 distinct user tasks: log workouts, view, favorite, and prioritize mentorship opportunities, view progress towards mentorships, and redeem points for a mentorship session. These tasks shaped the core motivation loop — activity, reward, opportunity — and became the foundation for detailed user flows covering user actions, system responses, and the screens needed at each step.
 
-I then created a site map showing how the home, mentorship, and workout pages connect across mobile and desktop layouts. From there, I converted the user flows and site map into markdown descriptives that AI could parse and use as build context.
+I then created a site map showing how the home, mentorship, and workout pages connect across mobile and desktop layouts. 
+
+From there, I converted the user flows and site map into markdown descriptives that AI could parse and use for context to more quickly build the application.
 
 I then created multiple UI designs through sketching ideation, creating at least 5 design options per screen. I then evaluated the sketches and chose one winning sketch per screen.
 

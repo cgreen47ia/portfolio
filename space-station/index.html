@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="International Space Station Tracker — real-time ISS orbital position and crew manifest powered by Open Notify public telemetry APIs.">
+  <title>International Space Station Tracker — Courtney Green</title>
+  <link rel="icon" href="../assets/favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-accent: #FFC940;
+      --color-accent-deep: #E8A800;
+      --color-blue: #2A5F9E;
+      --color-blue-deep: #1E4578;
+      --color-blue-bg: #E6EEF6;
+      --color-cta: #C4451E;
+      --color-cta-hover: #A83818;
+      --color-ink: #0A0A0A;
+      --color-ink-inverse: #FAFAFA;
+      --color-canvas: #FAFAFA;
+      --color-surface: #FFFFFF;
+      --color-surface-muted: #EBEBEB;
+      --color-surface-dark: #141414;
+      --color-border: #D4D4D4;
+      --color-border-strong: #0A0A0A;
+      --color-border-inverse: #FAFAFA;
+      --color-text-secondary: #525252;
+      --color-text-muted: #737373;
+      --color-text-secondary-inverse: #A3A3A3;
+      --color-focus-ring: #C4451E;
+
+      --font-sans: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+      --font-serif: "Libre Baskerville", Georgia, serif;
+      --text-display-xl: clamp(2.75rem, 6vw, 5.5rem);
+      --text-display-lg: clamp(2.25rem, 4.5vw, 4rem);
+      --text-display-md: clamp(1.75rem, 3vw, 2.75rem);
+      --text-heading-sm: 1.125rem;
+      --text-body-lg: 1.125rem;
+      --text-body-md: 1rem;
+      --text-body-sm: 0.875rem;
+      --text-label: 0.75rem;
+
+      --space-2: 8px;
+      --space-4: 16px;
+      --space-5: 24px;
+      --space-6: 32px;
+      --space-7: 48px;
+      --space-8: 64px;
+      --space-9: 96px;
+
+      --container-max: 1440px;
+      --container-narrow: 960px;
+      --section-padding-x: clamp(20px, 5vw, 80px);
+      --section-padding-y: clamp(64px, 10vw, 120px);
+
+      --radius-md: 8px;
+      --radius-lg: 16px;
+      --radius-full: 999px;
+      --shadow-sm: 0 1px 3px rgba(10, 10, 10, 0.08);
+      --shadow-lg: 0 12px 32px rgba(10, 10, 10, 0.12);
+
+      --duration-fast: 120ms;
+      --duration-normal: 200ms;
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      font-size: var(--text-body-md);
+      line-height: 1.6;
+      color: var(--color-ink);
+      background: var(--color-canvas);
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--color-focus-ring);
+      outline-offset: 2px;
+    }
+
+    img { display: block; max-width: 100%; height: auto; }
+    a { color: inherit; }
+
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--section-padding-x);
+    }
+
+    .container--narrow { max-width: var(--container-narrow); }
+
+    .section { padding: var(--section-padding-y) 0; }
+    .section--compact { padding: var(--space-7) 0; }
+
+    .eyebrow {
+      font-size: var(--text-label);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      margin: 0 0 var(--space-5);
+    }
+
+    .eyebrow::after {
+      content: "";
+      width: 48px;
+      height: 1px;
+      background: currentColor;
+      opacity: 0.35;
+    }
+
+    .eyebrow--inverse::after { opacity: 0.5; }
+
+    .section-title {
+      font-size: var(--text-display-lg);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin: 0 0 var(--space-6);
+    }
+
+    .section-lead {
+      font-size: var(--text-body-lg);
+      color: var(--color-text-secondary);
+      max-width: 65ch;
+      margin: 0;
+    }
+
+    .theme-dark {
+      background: var(--color-surface-dark);
+      color: var(--color-ink-inverse);
+    }
+
+    .theme-dark .section-lead { color: var(--color-text-secondary-inverse); }
+
+    .theme-dark .prose p { color: var(--color-text-secondary-inverse); }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--color-surface);
+      box-shadow: var(--shadow-sm);
+      height: 64px;
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      gap: var(--space-5);
+    }
+
+    .nav__logo {
+      font-weight: 700;
+      font-size: var(--text-heading-sm);
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav__logo-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .nav__links {
+      display: none;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      gap: var(--space-5);
+    }
+
+    .nav__cta { display: none; }
+
+    .nav__menu-btn {
+      display: none;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--color-border);
+      background: transparent;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-ink);
+    }
+
+    @media (max-width: 767px) {
+      .nav__menu-btn { display: flex; }
+    }
+
+    @media (min-width: 768px) {
+      .nav__links { display: flex; }
+      .nav__cta { display: inline-flex; }
+      .nav__overlay { display: none !important; }
+    }
+
+    .nav__links a {
+      font-size: var(--text-label);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      color: var(--color-ink);
+    }
+
+    .nav__links a:hover { text-decoration: underline; }
+
+    .nav__overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: var(--color-surface-dark);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-6);
+    }
+
+    .nav__overlay.is-open { display: flex; }
+
+    .nav__overlay a {
+      font-size: var(--text-heading-sm);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-ink-inverse);
+      text-decoration: none;
+    }
+
+    .nav__overlay-close {
+      position: absolute;
+      top: 10px;
+      right: var(--section-padding-x);
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--color-border-inverse);
+      background: transparent;
+      border-radius: var(--radius-md);
+      color: var(--color-ink-inverse);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      font-family: var(--font-sans);
+      font-weight: 500;
+      font-size: var(--text-body-sm);
+      border: none;
+      cursor: pointer;
+      border-radius: var(--radius-md);
+      min-height: 44px;
+      padding: 14px 28px;
+      text-decoration: none;
+      transition: background var(--duration-normal) var(--ease-out),
+                  transform var(--duration-fast) var(--ease-out);
+    }
+
+    .btn:active { transform: scale(0.98); }
+    .btn--primary { background: var(--color-cta); color: #FFFFFF; }
+    .btn--primary:hover { background: var(--color-cta-hover); }
+    .btn--secondary { background: var(--color-accent); color: var(--color-ink); }
+    .btn--secondary:hover { background: var(--color-accent-deep); }
+    .btn--ghost {
+      background: transparent;
+      color: var(--color-ink);
+      border: 1px solid var(--color-border-strong);
+    }
+    .btn--ghost:hover { background: rgba(10, 10, 10, 0.04); }
+    .btn--pill { border-radius: var(--radius-full); }
+
+    .hero {
+      background: var(--color-accent);
+      padding: var(--section-padding-y) 0;
+    }
+
+    .hero__grid {
+      display: grid;
+      gap: var(--space-7);
+      align-items: center;
+    }
+
+    @media (min-width: 768px) {
+      .hero__grid {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-8);
+      }
+    }
+
+    .hero__headline {
+      font-size: var(--text-display-xl);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin: 0 0 var(--space-6);
+      max-width: 24ch;
+    }
+
+    .hero__lead {
+      font-size: var(--text-body-lg);
+      max-width: 50ch;
+      margin: 0 0 var(--space-7);
+    }
+
+    .hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+    }
+
+    .hero__media {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero__mockup {
+      width: 100%;
+      max-width: 780px;
+      border-radius: var(--radius-lg);
+      filter: drop-shadow(0 12px 32px rgba(10, 10, 10, 0.12));
+    }
+
+    .meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-6);
+      margin: 0;
+    }
+
+    .meta-bar__item { margin: 0; }
+
+    .meta-bar__item dt {
+      font-size: var(--text-label);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-2);
+    }
+
+    .meta-bar__item dd {
+      font-size: var(--text-body-md);
+      font-weight: 500;
+      margin: 0;
+    }
+
+    .prose p {
+      font-size: var(--text-body-lg);
+      color: var(--color-text-secondary);
+      max-width: 65ch;
+      margin: 0 0 var(--space-5);
+    }
+
+    .prose p:last-child { margin-bottom: 0; }
+
+    .process-pipeline {
+      list-style: none;
+      margin: 0 0 var(--space-7);
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      row-gap: var(--space-5);
+      column-gap: var(--space-4);
+    }
+
+    .process-pipeline__step {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-accent);
+      color: var(--color-ink);
+      font-size: var(--text-body-sm);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      line-height: 1.4;
+      padding: var(--space-4) var(--space-5);
+      min-height: 44px;
+      border-radius: var(--radius-full);
+      margin: 0;
+      white-space: normal;
+      text-align: center;
+    }
+
+    .process-pipeline__arrow {
+      color: var(--color-text-muted);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .split-grid {
+      display: grid;
+      gap: var(--space-8);
+    }
+
+    @media (min-width: 768px) {
+      .split-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .design-showcase {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-9);
+      margin-top: var(--space-7);
+    }
+
+    .design-showcase__item {
+      margin: 0;
+    }
+
+    .design-showcase__title {
+      font-size: var(--text-heading-sm);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0 0 var(--space-4);
+      color: var(--color-ink);
+    }
+
+    .design-showcase__desc {
+      font-size: var(--text-body-lg);
+      color: var(--color-text-secondary);
+      max-width: 65ch;
+      margin: 0 0 var(--space-6);
+      line-height: 1.6;
+    }
+
+    .design-showcase__media {
+      margin: 0;
+      border-radius: 0;
+      overflow: visible;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+    }
+
+    .design-showcase__media img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .process-figures {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+      margin: var(--space-6) 0 var(--space-7);
+    }
+
+    .process-figures--row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: calc(var(--space-8) + 50px);
+      align-items: start;
+      width: min(100vw - 2 * var(--section-padding-x), calc(var(--container-narrow) + 280px));
+      max-width: none;
+      margin-left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .process-figures--row .process-figure {
+      min-width: 0;
+      width: 100%;
+      max-width: 100%;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+      overflow: visible;
+    }
+
+    .process-figures--row .process-figure img {
+      width: 70%;
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .process-figures--row .process-figure--smaller img {
+      width: 70%;
+      max-width: none;
+    }
+
+    .process-figure figcaption {
+      margin: 0 0 var(--space-4);
+      font-size: calc(var(--text-body-sm) + 2px);
+      font-weight: 700;
+      color: var(--color-ink);
+      letter-spacing: 0.02em;
+    }
+
+    @media (max-width: 767px) {
+      .process-figures--row {
+        grid-template-columns: 1fr;
+        width: 100%;
+        margin-left: 0;
+        transform: none;
+        gap: var(--space-5);
+      }
+    }
+
+    .process-figure {
+      margin: 0;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-lg);
+      background: var(--color-surface-muted);
+    }
+
+    .process-figure--overview {
+      margin: 0 0 var(--space-8);
+      background: var(--color-surface);
+    }
+
+    .process-figure--captioned {
+      border: none;
+      box-shadow: none;
+      background: transparent;
+      overflow: visible;
+    }
+
+    .process-figure--captioned .process-figure__media {
+      margin: 0;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-lg);
+      background: var(--color-surface-muted);
+    }
+
+    .process-figure--half .process-figure__media {
+      width: 25%;
+      max-width: 25%;
+    }
+
+    .process-figure--half .process-figure__media img {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .prose > .process-figure {
+      margin: var(--space-6) 0 var(--space-7);
+    }
+
+    .process-figure img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .outcome-serif {
+      font-family: var(--font-serif);
+      font-size: var(--text-display-md);
+      font-weight: 400;
+      line-height: 1.2;
+      margin: 0 0 var(--space-6);
+      max-width: 24ch;
+    }
+
+    .footer {
+      background: var(--color-ink);
+      color: var(--color-text-secondary-inverse);
+      padding: var(--space-8) 0;
+    }
+
+    .footer__inner {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+    }
+
+    @media (min-width: 768px) {
+      .footer__inner {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+    .footer__links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-5);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .footer__links a {
+      font-size: var(--text-label);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-secondary-inverse);
+      text-decoration: none;
+    }
+
+    .footer__links a:hover {
+      color: var(--color-ink-inverse);
+      text-decoration: underline;
+    }
+
+    .footer__copy {
+      font-size: var(--text-body-sm);
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="nav">
+    <div class="container nav__inner">
+      <a href="../" class="nav__logo" aria-label="Back to portfolio home">
+        <img src="../assets/logo.png" alt="" class="nav__logo-mark" width="32" height="32">
+        Courtney Green
+      </a>
+      <ul class="nav__links">
+        <li><a href="../#projects">Projects</a></li>
+        <li><a href="../#about">About</a></li>
+        <li><a href="../#contact">Contact</a></li>
+      </ul>
+      <a href="https://www.linkedin.com/in/courtney-green/" class="btn btn--primary btn--pill nav__cta" target="_blank" rel="noopener noreferrer">
+        Connect on LinkedIn
+        <i data-lucide="arrow-right" style="width:16px;height:16px" aria-hidden="true"></i>
+      </a>
+      <button class="nav__menu-btn" id="menu-open" aria-label="Open menu" aria-expanded="false">
+        <i data-lucide="menu" aria-hidden="true"></i>
+      </button>
+    </div>
+  </header>
+
+  <nav class="nav__overlay" id="nav-overlay" aria-label="Mobile navigation" hidden>
+    <button class="nav__overlay-close" id="menu-close" aria-label="Close menu">
+      <i data-lucide="x" aria-hidden="true"></i>
+    </button>
+    <a href="../#projects">Projects</a>
+    <a href="../#about">About</a>
+    <a href="../#contact">Contact</a>
+  </nav>
+
+  <main>
+    <section class="hero" aria-labelledby="project-heading">
+      <div class="container hero__grid">
+        <div class="hero__content">
+          <p class="eyebrow">Science</p>
+          <h1 class="hero__headline" id="project-heading">International Space Station Tracker</h1>
+          <p class="hero__lead">Real-time orbital position and crew manifest for humanity's orbiting laboratory — updated from Open Notify public telemetry APIs.</p>
+          <div class="hero__actions">
+            <a href="https://cool-crepe-66657d.netlify.app/" class="btn btn--primary btn--pill" target="_blank" rel="noopener noreferrer">
+              Live Demo
+              <i data-lucide="external-link" style="width:16px;height:16px" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <img class="hero__mockup" src="assets/mockup_hero_space_station.png" alt="International Space Station Tracker mockup" width="1107" height="688">
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--compact" aria-label="Project details">
+      <div class="container">
+        <dl class="meta-bar">
+          <div class="meta-bar__item">
+            <dt>Year</dt>
+            <dd>2026</dd>
+          </div>
+          <div class="meta-bar__item">
+            <dt>Role</dt>
+            <dd>Designer &amp; Developer</dd>
+          </div>
+          <div class="meta-bar__item">
+            <dt>Tools</dt>
+            <dd>HTML, CSS, React, Cursor, Netlify, Figjam</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="overview-heading">
+      <div class="container container--narrow">
+        <p class="eyebrow">Context</p>
+        <h2 class="section-title" id="overview-heading">Overview</h2>
+        <div class="prose">
+          <p>This project is a responsive single page web application for tracking the International Space Station's (ISS) real-time position around the earth and the current crew count onboard. Users can view where the ISS is currently located over the earth's surface and can view this information in a 3D globe format or in a 2D flat map.</p>
+          <p>In addition, users can view how many astronauts and the names of the astronauts currently onboard the ISS.</p>
+          <p>The real-time position and crew information from the ISS is collected and updated from the Open Notify public API (http://api.open-notify.org/iss-now.json). The application continuously fetches this information from the API to ensure up-to-date information. A design system inspired by Space X's website was also created for this application using skills created with Cursor.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section theme-dark" aria-labelledby="problem-heading">
+      <div class="container container--narrow">
+        <p class="eyebrow eyebrow--inverse">Challenge</p>
+        <h2 class="section-title" id="problem-heading">Problem</h2>
+        <p class="section-lead">For people interested in the International Space Station and those onboard, updates are often limited to social media postings, press releases, or news articles. This application allows users to view the flight path of the ISS, its location over the earth, and the astronauts onboard, allowing them a closer look into the movements of the world's longest running space station.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="process-heading">
+      <div class="container container--narrow">
+        <p class="eyebrow">Process</p>
+        <h2 class="section-title" id="process-heading">Process</h2>
+        <figure class="process-figure process-figure--overview">
+          <img src="assets/process_illustration.png" alt="Illustrated process steps for the International Space Station Tracker" width="1536" height="1024">
+        </figure>
+        <div class="prose">
+          <p>First, two necessary user tasks were identified: View the real-time position of the ISS, and View the Crew Count and astronaut names on the ISS. From there, user flows were created to represent the steps each user would need to take to accomplish these tasks and the screens needed. User flows are a visual representation which is easier for humans to understand and reference.</p>
+
+          <div class="process-figures process-figures--row">
+            <figure class="process-figure">
+              <figcaption>User Flow for Task 1</figcaption>
+              <img src="assets/user_flow_1.png" alt="User flow for viewing the real-time position of the ISS" width="1718" height="3180">
+            </figure>
+            <figure class="process-figure process-figure--smaller">
+              <figcaption>User Flow for Task 2</figcaption>
+              <img src="assets/user_flow_2.png" alt="User flow for viewing crew count and astronaut names on the ISS" width="1988" height="3558">
+            </figure>
+          </div>
+
+          <p>Next, a simple site map was created to show how the sections on the page would be organized and related. Then the visual user flows and site map were converted into a semantic markdown version that AI could more easily process and use.</p>
+
+          <p>I then utilized a Cursor skill to create a design system inspired by Space X's website. The design system was then iterated within cursor until the components needed for the application were correct. This process resulted in a DESIGN.md file.</p>
+
+          <figure class="process-figure process-figure--captioned">
+            <figcaption>Design System created for this project</figcaption>
+            <div class="process-figure__media">
+              <img src="assets/design_system.png" alt="Design system documentation inspired by SpaceX website styling" width="4114" height="3900">
+            </div>
+          </figure>
+
+          <p>From here, a PLAN.md file was created which combined the semantic markdown versions of the user flows and site map. It also contained instructions on accessing the Open Notify public API and how to fetch and use data for this application. It also specified additional functionality needed, such as the ability to refresh data and retry a failed API call.</p>
+
+          <figure class="process-figure process-figure--captioned">
+            <figcaption>PLAN.md for AI-assisted build</figcaption>
+            <div class="process-figure__media">
+              <img src="assets/plan_md.png" alt="PLAN.md combining user flows, site map, and Open Notify API instructions" width="4186" height="4068">
+            </div>
+          </figure>
+
+          <p>The PLAN.md file was then executed within Cursor (which in turn, executed the DESIGN.md file for the design system). This created the first version of the application. Through follow-up prompts, I implemented a way to view the ISS location over a 3D sphere in addition to a 2D map. I added empty states, error states, and loading states for each section on the page. I also updated the design of the crew onboard section.</p>
+
+          <p>I then deployed this application to Netlify.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section theme-dark" aria-labelledby="solution-heading">
+      <div class="container container--narrow">
+        <p class="eyebrow eyebrow--inverse">Approach</p>
+        <h2 class="section-title" id="solution-heading">Solution</h2>
+        <p class="section-lead">When a user first lands on the page, they immediately see the location of the International Space Station as represented by a pulsing spacecraft icon and a large 3D globe of the earth. From here, the user can choose to view the ISS position over a 2D map and they can scroll down to the next section to see the number of astronauts onboard and the names of each astronaut.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="designs-heading">
+      <div class="container">
+        <p class="eyebrow">Interface</p>
+        <h2 class="section-title" id="designs-heading">Designs</h2>
+
+        <div class="design-showcase">
+          <article class="design-showcase__item">
+            <h3 class="design-showcase__title">Flat map view</h3>
+            <p class="design-showcase__desc">On this screen, the user can see an easy to understand flat 2D map of the earth with a pulsing orange spacecraft icon over it. The location of the icon reflects the location of the space station in real-time. Latitude and Longitude coordinates are also provided for reference, and a date and time stamp of when it was last updated is provided at the bottom. The user can refresh this view or they can click the toggle button to view this as a 3D globe.</p>
+            <figure class="design-showcase__media">
+              <img src="assets/space_station_visual_1.png" alt="ISS Tracker flat 2D map with pulsing spacecraft icon and coordinates" width="1073" height="888">
+            </figure>
+          </article>
+
+          <article class="design-showcase__item">
+            <h3 class="design-showcase__title">3D globe view</h3>
+            <p class="design-showcase__desc">In the 3D view, the user can see an easy to understand globe of the earth with a pulsing orange spacecraft icon over it. The location of the icon reflects the location of the space station in real-time. Latitude and Longitude coordinates are also provided for reference, and a date and time stamp of when it was last updated is provided at the bottom. The user can refresh this view or they can click the toggle button to view this as a 3D globe.</p>
+            <figure class="design-showcase__media">
+              <img src="assets/space_station_visual_2.png" alt="ISS Tracker 3D globe view with pulsing spacecraft icon and coordinates" width="960" height="944">
+            </figure>
+          </article>
+
+          <article class="design-showcase__item">
+            <h3 class="design-showcase__title">Crew onboard</h3>
+            <p class="design-showcase__desc">In the bottom section of this screen, users can clearly see how many astronauts are onboard the Space Station and the name of each astronaut. Only astronauts aboard the ISS are listed here and others onboard other spacecraft are omitted.</p>
+            <figure class="design-showcase__media">
+              <img src="assets/space_station_visual_3.png" alt="ISS Tracker crew onboard section showing astronaut count and names" width="1075" height="785">
+            </figure>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section theme-dark" aria-labelledby="reflections-heading">
+      <div class="container container--narrow">
+        <p class="eyebrow eyebrow--inverse">Results</p>
+        <h2 class="outcome-serif" id="reflections-heading">Reflections</h2>
+        <div class="prose">
+          <p>I learned how to implement a public API within a vibe coded project. It went suprisingly smoothly and I only encountered technical issues when I was deploying the project to Netlify. I was able to quickly troubleshoot and fix these issues with Cursor as an aid. Creating complex visualizations such as the globe view of the earth was also a quicker process than I anticipated, but creating the space station icon was the most challenging part. It was difficult to get the size and icon representation of it correct, but I eventually got there.</p>
+        </div>
+        <div class="hero__actions" style="margin-top: var(--space-7);">
+          <a href="https://cool-crepe-66657d.netlify.app/" class="btn btn--primary btn--pill" target="_blank" rel="noopener noreferrer">
+            Live Demo
+            <i data-lucide="external-link" style="width:16px;height:16px" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-label="Explore more work">
+      <div class="container" style="text-align:center;">
+        <h2 class="section-title">Explore more work</h2>
+        <p class="section-lead" style="margin:0 auto var(--space-7);">Browse other vibe coding projects or get in touch.</p>
+        <div class="hero__actions" style="justify-content:center;">
+          <a href="../#projects" class="btn btn--secondary btn--pill">
+            All Projects
+            <i data-lucide="arrow-right" style="width:16px;height:16px" aria-hidden="true"></i>
+          </a>
+          <a href="../#contact" class="btn btn--ghost btn--pill">Get In Touch</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p class="footer__copy">&copy; 2026 Courtney Green. Built with Cursor.</p>
+      <ul class="footer__links">
+        <li><a href="../#projects">Projects</a></li>
+        <li><a href="../#about">About</a></li>
+        <li><a href="../#contact">Contact</a></li>
+        <li><a href="../preview.html">Design System</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script>
+    lucide.createIcons();
+
+    const menuOpen = document.getElementById('menu-open');
+    const menuClose = document.getElementById('menu-close');
+    const overlay = document.getElementById('nav-overlay');
+
+    function openMenu() {
+      overlay.hidden = false;
+      overlay.classList.add('is-open');
+      menuOpen.setAttribute('aria-expanded', 'true');
+      menuClose.focus();
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      overlay.classList.remove('is-open');
+      overlay.hidden = true;
+      menuOpen.setAttribute('aria-expanded', 'false');
+      menuOpen.focus();
+      document.body.style.overflow = '';
+    }
+
+    menuOpen.addEventListener('click', openMenu);
+    menuClose.addEventListener('click', closeMenu);
+    overlay.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', closeMenu);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeMenu();
+    });
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768 && overlay.classList.contains('is-open')) closeMenu();
+    });
+  </script>
+</body>
+</html>
