@@ -20,11 +20,11 @@ github_url:
 
 ## Overview
 
-This project is a responsive single page web application for tracking the International Space Station's (ISS) real-time position around the earth and the current crew count onboard. Users can view where the ISS is currently located over the earth's surface and can view this information in a 3D globe format or in a 2D flat map.
+This project is a responsive single page web application for tracking the International Space Station's (ISS) real-time position around the earth and the current crew count onboard. Users can view where the ISS is currently located over the earth's surface and can view this information on a 3D globe format or on a 2D flat map.
 
-In addition, users can view how many astronauts and the names of the astronauts currently onboard the ISS.
+In addition, users can view how many astronauts are onboard the ISS and their names.
 
-The real-time position and crew information from the ISS is collected and updated from the Open Notify public API (http://api.open-notify.org/iss-now.json). The application continuously fetches this information from the API to ensure up-to-date information. A design system inspired by Space X's website was also created for this application using skills created with Cursor.
+The real-time position and crew information from the ISS is collected and updated from the Open Notify public API (http://api.open-notify.org/iss-now.json). The application continuously fetches this information from the API to ensure up-to-date information. A design system inspired by SpaceX's website was also created for this application using skills created with Cursor.
 
 ## Problem
 
@@ -37,9 +37,9 @@ For people interested in the International Space Station and those onboard, upda
 
 First, two necessary user tasks were identified: View the real-time position of the ISS, and View the Crew Count and astronaut names on the ISS. From there, user flows were created to represent the steps each user would need to take to accomplish these tasks and the screens needed. User flows are a visual representation which is easier for humans to understand and reference.
 
-Next, a simple site map was created to show how the sections on the page would be organized and related. Then the visual user flows and site map were converted into a semantic markdown version that AI could more easily process and use.
+Next, a simple site map was created to show how the sections on the page would be organized and related. Then the visual user flows and site map were converted into a semantic markdown versions that AI could more easily process and use.
 
-I then utilized a Cursor skill to create a design system inspired by Space X's website. The design system was then iterated within cursor until the components needed for the application were correct. This process resulted in a DESIGN.md file.
+I then utilized a Cursor skill to create a design system inspired by SpaceX's website. The design system was then iterated within cursor until the components needed for the application were correct. This process resulted in a DESIGN.md file.
 
 From here, a PLAN.md file was created which combined the semantic markdown versions of the user flows and site map. It also contained instructions on accessing the Open Notify public API and how to fetch and use data for this application. It also specified additional functionality needed, such as the ability to refresh data and retry a failed API call.
 

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Mobile Inspections App â€” a field inspection tool for creating and capturing checklists and notes during property or quality reviews.">
-  <title>Mobile Inspections App â€” Courtney Green</title>
+  <meta name="description" content="Mobile Inspections App — a field inspection tool for creating and capturing checklists and notes during property or quality reviews.">
+  <title>Mobile Inspections App — Courtney Green</title>
   <link rel="icon" href="../assets/favicon.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -751,7 +751,7 @@
           <img src="assets/process_illustration.png" alt="Illustrated process steps for the Mobile Inspections App" width="1536" height="1024">
         </figure>
         <div class="prose">
-          <p>I first identifed 3 tasks that users need to conduct: complete (or execute) an inspection, create a new checklist, and update an inspection checklist item. From here, I created 3 users flows (1 for each task) that demonstrates the actions users need to take and the screens they need access in order to complete the task successfully.</p>
+          <p>I first identifed 3 tasks that users need to conduct: complete (or execute) an inspection, create a new inspection, and update an inspection checklist item. From here, I created 3 users flows (1 for each task) that demonstrates the actions users need to take and the screens they need to access in order to complete the task successfully.</p>
 
           <div class="process-figures process-figures--row">
             <figure class="process-figure">
@@ -760,11 +760,11 @@
             </figure>
             <figure class="process-figure process-figure--smaller">
               <figcaption>User Flow for Task 2</figcaption>
-              <img src="assets/user_flow_2.png" alt="User flow for creating a new inspection checklist" width="6308" height="3138">
+              <img src="assets/user_flow_2.png" alt="User flow for creating a new inspection" width="6308" height="3138">
             </figure>
           </div>
 
-          <p>From here, I created a site map for this application which supports all user flows and then created a semantic version of all user flows and the site map that AI can best parse and use. Then I used these semantic flows and site map to construct the initial prompts and then create the application using Figma Make. I then continued to prompt Figma Make until the first user flow was created.</p>
+          <p>From here, I created a site map for this application which supports all user flows and then created a markdown version of all user flows and the site map. This markdown version provides a format that AI tools can better understand and process. Then I used these markdown user flows and site map to construct the initial prompts and then create the application using Figma Make. I then continued to prompt Figma Make until the first user flow was created.</p>
 
           <div class="process-figures">
             <figure class="process-figure process-figure--captioned process-figure--half">
@@ -776,12 +776,12 @@
             <figure class="process-figure process-figure--captioned">
               <figcaption>Text-based user flow for AI use</figcaption>
               <div class="process-figure__media">
-                <img src="assets/descriptives.png" alt="Semantic markdown descriptives of user flows and site map for AI parsing" width="3520" height="1590">
+                <img src="assets/descriptives.png" alt="Markdown descriptives of user flows and site map for AI parsing" width="3520" height="1590">
               </div>
             </figure>
           </div>
 
-          <p>I then exported the code from Figma Make and imported into Cursor. Once I got the application up and running in Cursor, I prompted until the last two user flows were available in the application.</p>
+          <p>After the first user flow was created, I then exported the code from Figma Make and imported it into Cursor. Once I got the application up and running in Cursor, I used the markdown user flows to create  the last two user flows in the application. While the base flows worked in the application at this point, there were several inconsistencies with screen layouts and design elements. More iterations were required to create a higher level of consistency across all screens.</p>
 
           <p>I also created a light theme and dark theme for this application. Users can toggle between each theme through a toggle button in the navigation bar. Once the application was completed, I deployed it to Netlify.</p>
         </div>
@@ -792,7 +792,7 @@
       <div class="container container--narrow">
         <p class="eyebrow eyebrow--inverse">Approach</p>
         <h2 class="section-title" id="solution-heading">Solution</h2>
-        <p class="section-lead">This mobile application allows users to view all available inspections, search for and find specific inspections, create new inspections.</p>
+        <p class="section-lead">This mobile application allows users to view all available inspections, search for and find specific inspections, create new inspections, and update existing inspections.</p>
       </div>
     </section>
 
@@ -817,7 +817,7 @@
 
           <article class="design-showcase__item">
             <h3 class="design-showcase__title">Inspections list</h3>
-            <p class="design-showcase__desc">When users navigate to Inspections, they can view all inspections and search and filter to find inspections. They can also read due dates and statuses of these inspections.</p>
+            <p class="design-showcase__desc">When users navigate to Inspections, they can view all inspections and search and filter to find specific inspections. They can also read due dates and statuses of these inspections.</p>
             <figure class="design-showcase__media design-showcase__media--mobile">
               <img src="assets/inspections_visual_2.png" alt="Inspections list with search, filters, due dates, and statuses" width="416" height="887">
             </figure>
@@ -852,8 +852,8 @@
         <p class="eyebrow eyebrow--inverse">Results</p>
         <h2 class="outcome-serif" id="reflections-heading">Reflections</h2>
         <div class="prose">
-          <p>Right out of the box, Figma Make produces a nicer looking user intuitive compared to Cursor. This assumes no design system is created and used in advance. It's initial versions of the application were designed quite nicely, although it also made some strange decisions intially as well.</p>
-          <p>I also learned how to export code from Figma Make to use it in other systems, such as Cursor.</p>
+          <p>Right out of the box, Figma Make produces a nicer and more modern-looking user interface compared to Cursor. This assumes no design system is created and used in advance. At first glance, this initial version of the application was designed quite well, although Figma Make also made some strange design decisions and it lacked consistency between design elements. This led to more rework of the screens compared to projects that created a design system first before producing screens.</p>
+          <p>While this application reflects a simple version of an inspections mobile application, it is suprising just how much functionality can be created in a short time using AI-aided design and coding methods. Future design directions for this project could include the creation of inspection templates, more complex inspection and checklist types, and the addition of photos and images in inspections.</p>
         </div>
         <div class="hero__actions" style="margin-top: var(--space-7);">
           <a href="https://benevolent-taiyaki-8ec17b.netlify.app/" class="btn btn--primary btn--pill" target="_blank" rel="noopener noreferrer">

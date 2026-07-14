@@ -32,13 +32,13 @@ Most people know they should track spending, but spreadsheets and complex financ
 
 3 User Tasks > User Flows > Site Map > Design System > Iterations in Cursor > Deploy to Netlify
 
-From an app idea, I created 3 distinct user tasks that users would need to conduct in order to support the app idea. These tasks include entering a monthly income, adding expenses to a category, and adjusting category limits when overspending occurs. From these tasks, I created detailed user flows, detailing user actions, system actions, and screens to support each task.
+From an app idea, I created 3 distinct user tasks that users would need to conduct: entering a monthly income, adding expenses to a category, and adjusting category limits when overspending occurs. From these tasks, I created detailed user flows, detailing user actions, system actions, and screens to support each task.
 
 I then created a site map, showing the pages, their sections, and how the pages are related. From here, I converted these user flows and site map into a descriptive version in markdown format that AI can parse and understand.
 
 I then created a skill in Cursor that can convert any existing website into a design system. The skill does not include proprietary designs from these web pages. I used this skill to convert Nerd Wallet's web design into a design system, which resulted in the creation of a DESIGN.md file. This file served as the styling and design system source of truth for this application.
 
-From here, using the text descriptives, I prompted Cursor to create the application one step at a time, by creating site pages and user flows. I then iterated on the designs by ensuring the user flows worked without bugs and by making changes to the output. Once complete, I deployed the application to Netlify.
+From here, using the user flow markdown versions, I prompted Cursor to create the application one step at a time, by creating site pages and user flows. I then iterated on the designs by ensuring the user flows worked without bugs and by making changes to the output. Once complete, I deployed the application to Netlify.
 
 ## Solution
 
@@ -64,6 +64,6 @@ The categories view organizes every budget area in a scannable grid. Users can a
 
 ## Reflections
 
-This was the first AI-generated web application I created using this process. Overall, I was suprised at the efficiency of creating a multi-feature web app with the process, and the ability to create a consistently applied design system. Basing the prompts and designs on user flows and interaction patterns established a user-centered approach to this AI designed web application. 
+This was the first AI-generated web application I created using this process. Overall, I was suprised at the efficiency of creating a multi-feature web app with the process, and the ability to create a consistently applied design system. Basing the prompts and designs on user flows and interaction patterns established a user-centered approach to this AI-aided web application. 
 
 This project strengthened my process to designing and building web applications with AI. Future improvements to the app could include recurring transaction support, export to CSV, and month-over-month comparison views.
